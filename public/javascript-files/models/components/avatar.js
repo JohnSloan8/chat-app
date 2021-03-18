@@ -3,61 +3,57 @@ import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/js
 import { scene } from "../../scene/components/scene.js";
 import { animate } from "../../main.js";
 
-let model, skeleton, animations, mixer, numAnimations;
-const allActions = [];
-var movementController = {
-	move: false,
-	rotation: {
-		bool: false,
-		x: 0,
-		y: 0,
-		z: 0
-	},
-	position: {
-		bool: true,
-		x: -0.04,
-		y: 0,
-		z: 0
-	},
-}
-window.allActions = allActions;
-window.movementController = movementController;
+let numAnimations, clip, name, animations, action, gltfLoader;
+const participants = {
+	jim: {},
+	jack: {},
+	joe: {},
+	jeff: {},
+};
+window.participants = participants;
+const positions = [
+	[-0.31, -0.95],
+	[0.81, -0.59],
+	[0.81, 0.59],
+	[-0.31, 0.95],
+];
+const angle = [36, -54, -126, 144]
 
 export default function setupAvatar() {
-	var gltfLoader = new GLTFLoader();
-	gltfLoader.load("javascript-files/models/resources/woman-dsd.glb", function(
-		gltf
-	) {
-		model = gltf.scene;
-		model.scale.set(0.03, 0.03, 0.03);
-		model.rotation.set(0, -1.5708, 0);
-		model.position.set(0, 0, 0);
-		scene.add(model);
+	Object.values(participants).forEach(function(v, i) {
+		gltfLoader = new GLTFLoader();
+		gltfLoader.load("javascript-files/models/resources/man.glb", function(
+			gltf
+		) {
+			v.model = gltf.scene;
+			v.model.rotation.set(0, angle[i] * Math.PI/180, 0);
+			v.model.position.set(positions[i][0], 0, positions[i][1]);
+			scene.add(v.model);
 
-		model.traverse(function(object) {
-			if (object.isMesh) object.castShadow = true;
+			v.model.traverse(function(object) {
+				if (object.isMesh) object.castShadow = true;
+			});
+
+			//skeleton = new THREE.SkeletonHelper(model);
+			//skeleton.visible = true;
+			//scene.add(skeleton);
+
+			animations = gltf.animations;
+			v.mixer = new THREE.AnimationMixer(v.model);
+			numAnimations = animations.length;
+
+			v['allActions'] = [];
+			for (let i = 0; i !== numAnimations; ++i) {
+				clip = animations[i];
+				name = clip.name;
+				action = v.mixer.clipAction(clip);
+				v['allActions'].push(action);
+			}
 		});
-
-		//skeleton = new THREE.SkeletonHelper(model);
-		//skeleton.visible = true;
-		//scene.add(skeleton);
-
-		animations = gltf.animations;
-		mixer = new THREE.AnimationMixer(model);
-		window.mixer = mixer
-
-		numAnimations = animations.length;
-
-		for (let i = 0; i !== numAnimations; ++i) {
-			let clip = animations[i];
-			const name = clip.name;
-			const action = mixer.clipAction(clip);
-			allActions.push(action);
-		}
-
-		beginAction("stand");
-		animate();
 	});
+
+	//beginAction("stand");
+	animate();
 }
 
-export { allActions, numAnimations, mixer, model, movementController };
+export { participants };

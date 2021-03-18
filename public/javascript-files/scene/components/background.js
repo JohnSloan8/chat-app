@@ -5,7 +5,7 @@ let plane;
 
 export default function setupBackground() {
 	scene.background = new THREE.Color(0x87ceeb);
-	scene.fog = new THREE.Fog(0x87ceeb, 3.5, 5.0);
+	scene.fog = new THREE.Fog(0x87ceeb, 8.5, 10.0);
 
 	plane = new THREE.Mesh(
 		new THREE.PlaneGeometry(10, 10, 10, 10),

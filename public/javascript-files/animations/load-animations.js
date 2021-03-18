@@ -1,5 +1,3 @@
-import { allActions } from "../models/components/avatar.js"
-
 window.setWeight = setWeight
 
 function setWeight(action, weight) {

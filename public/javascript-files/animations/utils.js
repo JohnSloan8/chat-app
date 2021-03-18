@@ -1,4 +1,4 @@
-import { allActions, mixer } from "../models/components/avatar.js"
+import { participants } from "../models/components/avatar.js"
 import { setWeight } from "./load-animations.js"
 
 window.beginAction = beginAction;
