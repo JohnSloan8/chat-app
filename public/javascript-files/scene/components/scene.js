@@ -20,6 +20,14 @@ export default function setupScene() {
 	container.appendChild(renderer.domElement);
 	container.appendChild(stats.dom);
 
+	// add central pillar
+  const geometry = new THREE.BoxGeometry(0.01, 10, 0.01);
+	const material = new THREE.MeshBasicMaterial( { color: 0xaa0a0a } );
+	const cube = new THREE.Mesh( geometry, material );
+	scene.add( cube );	
+	const axesHelper = new THREE.AxesHelper( 5 );
+	scene.add( axesHelper );
+
 	window.addEventListener("resize", onWindowResize);
 }
 
