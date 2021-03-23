@@ -21,9 +21,9 @@ function init() {
 function animate() {
 	requestAnimationFrame(animate);
 	const mixerUpdateDelta = clock.getDelta();
-	Object.values(participants).forEach( function(v) {
-		v.mixer.update(mixerUpdateDelta);
-	})
+	//Object.values(participants).forEach( function(p) {
+		//p.mixer.update(mixerUpdateDelta);
+	//})
 	stats.update();
 
 	//if ( movementController.move ) { 
