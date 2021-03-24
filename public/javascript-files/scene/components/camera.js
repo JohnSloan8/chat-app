@@ -9,21 +9,21 @@ let camera, controls, numberParticipants, participantPositions, participantRotat
 export default function setupCamera() {
 
 	//posMult = 0.8;
-	let socialDistance = 1;
-	numberParticipants = 3;
-	let posRot = CalculatePositionsRotations( numberParticipants, socialDistance )
-	participantPositions = posRot[0]
-	participantRotations = posRot[1]
+	let socialDistance = 0.75;
+	numberParticipants = 4;
+	let allPosRot = CalculatePositionsRotations( numberParticipants, socialDistance )
+	participantPositions = allPosRot[0]
+	participantRotations = allPosRot[1]
 	
 	//let cameraZPos = 1 * CalculateCameraPosition( numberParticipants )
 	camera = new THREE.PerspectiveCamera(
-		posRot[3],
+		allPosRot[3],
 		window.innerWidth / window.innerHeight,
 		0.01,
 		100
 	);
 	//let variableCameraPos = CalculateCameraPosition()
-	camera.position.set(0, 1.69, posRot[2]);
+	camera.position.set(0, 1.69, allPosRot[2]);
 
 	controls = new OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 1.59, 0);

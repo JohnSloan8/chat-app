@@ -1,27 +1,61 @@
+var posRot = {
+	4: {
+		0: {
+			x: 0,
+			z: 1/(2*Math.sin(Math.PI/5)),
+			fov: 55,
+			rotations: [0, ]
+		},
+		1: {
+			x: -Math.cos(Math.PI/10)/(2*(Math.sin(Math.PI/5))), 
+			z: -Math.sin(Math.PI/10)/(2*(Math.sin(Math.PI/5))),
+			rotations: [Math.PI/5, (2/5)*Math.PI, (7/10)*Math.PI, Math.PI/2] 
+		},
+		2: {
+			x: 0, 
+			z: -1/(2*Math.sin(Math.PI/5)),
+			rotations: [0, -(3/10)*Math.PI, 0, (1/5)*Math.PI] 
+		},
+		3: {
+			x: Math.cos(Math.PI/10)/(2*(Math.sin(Math.PI/5))), 
+			z: -Math.sin(Math.PI/10)/(2*(Math.sin(Math.PI/5))),
+			rotations: [-Math.PI/5, -Math.PI/2, -(7/10)*Math.PI, -(2/5)*Math.PI] 
+		},
+	}		
+}
+
+//function calculateMirrorPosRot( numberOfParticipants ) {
+	//let startParticipant = Math.floor(numberOfParticipants/2 + 1)
+	//for (let i=startParticipant; i<numberOfParticipants; i++) {
+		//posRot[numberOfParticipants][i] = { 
+			//x: -posRot[numberOfParticipants][numberOfParticipants - startParticipant]['x'],
+			//z: posRot[numberOfParticipants][numberOfParticipants - startParticipant]['z'],
+			//rotations: posRot[numberOfParticipants][numberOfParticipants - startParticipant]['rotations'].map( x => -x )
+		//}
+	//}
+//}
+
+window.posRot = posRot;
+//window.calculateMirrorPosRot = calculateMirrorPosRot;
+
 export default function CalculatePositionsRotations( numberOfParticipants, socialDistance ) {
 	let positions = false;
 	let rotations = false;
-	let cameraPos = false;
-	let cameraFov = false;
+	let cameraPos = 0.5;
+	let cameraFov = 40;
+	//calculateMirrorPosRot( numberOfParticipants )
 	if ( numberOfParticipants === 2 ) {
 		positions = [[0, -0.5]]
 		rotations = [0]
-		cameraPos = 0.5
-		cameraFov = 45
 	} else if ( numberOfParticipants === 3 ) {
 		positions = [[-0.5, -0.5], [0.5, -0.5]]
 		rotations = [Math.PI/4, -Math.PI/4]
-		cameraPos = 0.5
-		cameraFov = 45
 	} else if ( numberOfParticipants === 4 ) {
-		let pos5a = Math.sin(Math.PI / 10) / (2 * Math.sin(Math.PI / 5 ))
-		let pos5b = 1 / (2 * Math.sin(Math.PI/5))
-		let pos5c = Math.cos(Math.PI/5)
-		let rot5a = Math.atan(pos5b/0.5)
-		positionsRotations = [[-0.5, -pos5b], [0.5, -pos5b], [pos5c, pos5a]]
-		rotations = [Math.PI/2 - rot5a,-(Math.PI / 2 - rot5a), -3*Math.PI/5]
-		cameraPos = 0.5
-		cameraFov = 45
+		positions = [[posRot[4][1].x, posRot[4][1].z], [posRot[4][2].x, posRot[4][2].z], [posRot[4][3].x, posRot[4][3].z]]
+		let w = 0;
+		rotations = [posRot[4][1].rotations[w], posRot[4][2].rotations[w], posRot[4][3].rotations[w]]
+		cameraPos = posRot[4][0].z
+		cameraFov = posRot[4][0].fov
 
 	//} else if ( numberOfParticipants === 3 ) {
 		//let pos3 = Math.cos(Math.PI/6) / 2

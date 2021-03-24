@@ -23,8 +23,15 @@ export default function setupScene() {
 	// add central pillar
   const geometry = new THREE.BoxGeometry(0.01, 10, 0.01);
 	const material = new THREE.MeshBasicMaterial( { color: 0xaa0a0a } );
-	const cube = new THREE.Mesh( geometry, material );
-	scene.add( cube );	
+	const centralColumn = new THREE.Mesh( geometry, material );
+	scene.add( centralColumn );	
+
+  const geometry1 = new THREE.BoxGeometry(1, 1, 1);
+	const material1 = new THREE.MeshBasicMaterial( { color: 0xaa0a0a } );
+	const cube = new THREE.Mesh( geometry1, material1 );
+	cube.position.set(0,0.5,0)
+	scene.add( cube );
+
 	const axesHelper = new THREE.AxesHelper( 5 );
 	scene.add( axesHelper );
 
