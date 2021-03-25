@@ -26,12 +26,6 @@ export default function setupScene() {
 	const centralColumn = new THREE.Mesh( geometry, material );
 	scene.add( centralColumn );	
 
-  const geometry1 = new THREE.BoxGeometry(1, 1, 1);
-	const material1 = new THREE.MeshBasicMaterial( { color: 0xaa0a0a } );
-	const cube = new THREE.Mesh( geometry1, material1 );
-	cube.position.set(0,0.5,0)
-	scene.add( cube );
-
 	const axesHelper = new THREE.AxesHelper( 5 );
 	scene.add( axesHelper );
 
