@@ -5,7 +5,7 @@ import setupCamera from "./components/camera.js";
 
 export default function loadScene() {
 	setupScene();
+	setupCamera();
 	setupBackground();
 	setupLights();
-	setupCamera();
 }

@@ -1,91 +1,91 @@
-var posRot = {
-	2: {
-		cornerCentreDist: 0.5/Math.sin(Math.PI/3),
-		tableRot: -Math.PI/6,
-		0: {
-			x: 0,
-			z: 0.5,
-			fov: 45,
-		},
-		1: {
-			x: 0, 
-			z: -0.5,
-			rotations: [ 0, 0 ] 
-		}
-	},
-	3: {
-		cornerCentreDist: Math.sqrt(2*0.5**2),
-		tableRot: Math.PI/4,
-		0: {
-			x: 0,
-			z: 0.5,
-			fov: 50,
-		},
-		1: {
-			x: -0.5, 
-			z: -0.5,
-			rotations: [ Math.atan(0.5), Math.PI/4, Math.PI/2 ] 
-		},
-		2: {
-			x: 0.5, 
-			z: -0.5,
-			rotations: [ -Math.atan(0.5), Math.PI/2, Math.PI/4 ] 
-		}
-	},
-	4: {
-		cornerCentreDist: 1/(2*(Math.sin(Math.PI/5))),
-		tableRot: Math.sin(Math.PI/10),
-		0: {
-			x: 0,
-			z: 0.5/Math.tan(Math.PI/5),
-			fov: 65,
-		},
-		1: {
-			x: -Math.cos(Math.PI/10)/(2*(Math.sin(Math.PI/5))), 
-			z: -Math.sin(Math.PI/10)/(2*(Math.sin(Math.PI/5))),
-			rotations: [Math.atan((0.5+Math.sin(Math.PI/10))/Math.cos(Math.PI/10)), (2/5)*Math.PI, (7/10)*Math.PI, Math.PI/2] 
-		},
-		2: {
-			x: 0, 
-			z: -1/(2*Math.sin(Math.PI/5)),
-			rotations: [0, -(3/10)*Math.PI, 0, (3/10)*Math.PI] 
-		},
-		3: {
-			x: Math.cos(Math.PI/10)/(2*(Math.sin(Math.PI/5))), 
-			z: -Math.sin(Math.PI/10)/(2*(Math.sin(Math.PI/5))),
-			rotations: [-Math.atan((0.5+Math.sin(Math.PI/10))/Math.cos(Math.PI/10)), -Math.PI/2, -(7/10)*Math.PI, -(2/5)*Math.PI] 
-		}
-	},
-	5: {
-		cornerCentreDist: 1,
-		tableRot: 0,
-		0: {
-			x: 0,
-			z: Math.cos(Math.PI/6),
-			fov: 55,
-		},
-		1: {
-			x: -1, 
-			z: 0,
-			rotations: [Math.atan(1/(Math.cos(Math.PI/6))), Math.PI/2, 5*Math.PI/6, 4*Math.PI/6, Math.PI/2] 
-		},
-		2: {
-			x: -0.5, 
-			z: -Math.cos(Math.PI/6),
-			rotations: [Math.atan(0.5/(2*Math.cos(Math.PI/6))), -Math.PI/6, Math.PI/6, Math.PI/2, Math.PI/3] 
-		},
-		3: {
-			x: 0.5, 
-			z:- Math.cos(Math.PI/6),
-			rotations: [-Math.atan(0.5/(2*Math.cos(Math.PI/6))), -Math.PI/3, -Math.PI/2, -Math.PI/6, Math.PI/6] 
-		},
-		4: {
-			x: 1, 
-			z: 0,
-			rotations: [-Math.atan(1/(Math.cos(Math.PI/6))), -Math.PI/2, -4*Math.PI/6, -5*Math.PI/6, -Math.PI/2] 
-		},
-	}		
-}
+//var posRot = {
+	//2: {
+		//cornerCentreDist: 0.5/Math.sin(Math.PI/3),
+		//tableRot: -Math.PI/6,
+		//0: {
+			//x: 0,
+			//z: 0.5,
+			//fov: 45,
+		//},
+		//1: {
+			//x: 0, 
+			//z: -0.5,
+			//rotations: [ 0, 0 ] 
+		//}
+	//},
+	//3: {
+		//cornerCentreDist: Math.sqrt(2*0.5**2),
+		//tableRot: Math.PI/4,
+		//0: {
+			//x: 0,
+			//z: 0.5,
+			//fov: 50,
+		//},
+		//1: {
+			//x: -0.5, 
+			//z: -0.5,
+			//rotations: [ Math.atan(0.5), Math.PI/4, Math.PI/2 ] 
+		//},
+		//2: {
+			//x: 0.5, 
+			//z: -0.5,
+			//rotations: [ -Math.atan(0.5), Math.PI/2, Math.PI/4 ] 
+		//}
+	//},
+	//4: {
+		//cornerCentreDist: 1/(2*(Math.sin(Math.PI/5))),
+		//tableRot: Math.sin(Math.PI/10),
+		//0: {
+			//x: 0,
+			//z: 0.5/Math.tan(Math.PI/5),
+			//fov: 65,
+		//},
+		//1: {
+			//x: -Math.cos(Math.PI/10)/(2*(Math.sin(Math.PI/5))), 
+			//z: -Math.sin(Math.PI/10)/(2*(Math.sin(Math.PI/5))),
+			//rotations: [Math.atan((0.5+Math.sin(Math.PI/10))/Math.cos(Math.PI/10)), (2/5)*Math.PI, (7/10)*Math.PI, Math.PI/2] 
+		//},
+		//2: {
+			//x: 0, 
+			//z: -1/(2*Math.sin(Math.PI/5)),
+			//rotations: [0, -(3/10)*Math.PI, 0, (3/10)*Math.PI] 
+		//},
+		//3: {
+			//x: Math.cos(Math.PI/10)/(2*(Math.sin(Math.PI/5))), 
+			//z: -Math.sin(Math.PI/10)/(2*(Math.sin(Math.PI/5))),
+			//rotations: [-Math.atan((0.5+Math.sin(Math.PI/10))/Math.cos(Math.PI/10)), -Math.PI/2, -(7/10)*Math.PI, -(2/5)*Math.PI] 
+		//}
+	//},
+	//5: {
+		//cornerCentreDist: 1,
+		//tableRot: 0,
+		//0: {
+			//x: 0,
+			//z: Math.cos(Math.PI/6),
+			//fov: 55,
+		//},
+		//1: {
+			//x: -1, 
+			//z: 0,
+			//rotations: [Math.atan(1/(Math.cos(Math.PI/6))), Math.PI/2, 5*Math.PI/6, 4*Math.PI/6, Math.PI/2] 
+		//},
+		//2: {
+			//x: -0.5, 
+			//z: -Math.cos(Math.PI/6),
+			//rotations: [Math.atan(0.5/(2*Math.cos(Math.PI/6))), -Math.PI/6, Math.PI/6, Math.PI/2, Math.PI/3] 
+		//},
+		//3: {
+			//x: 0.5, 
+			//z:- Math.cos(Math.PI/6),
+			//rotations: [-Math.atan(0.5/(2*Math.cos(Math.PI/6))), -Math.PI/3, -Math.PI/2, -Math.PI/6, Math.PI/6] 
+		//},
+		//4: {
+			//x: 1, 
+			//z: 0,
+			//rotations: [-Math.atan(1/(Math.cos(Math.PI/6))), -Math.PI/2, -4*Math.PI/6, -5*Math.PI/6, -Math.PI/2] 
+		//},
+	//}		
+//}
 
 //export default function CalculatePositionsRotations( numberOfParticipants, socialDistance ) {
 	//let positions = false;
@@ -143,4 +143,4 @@ var posRot = {
 //}
 
 //export { CalculateCameraPosition }
-export { posRot }
+//export { posRot }

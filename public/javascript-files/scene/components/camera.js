@@ -1,34 +1,89 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/controls/OrbitControls.js";
 import { renderer } from "./scene.js"
-//import { CalculateCameraPosition } from "../../models/components/positions-rotations.js"
-//import CalculatePositionsRotations from "./positions-rotations.js"
-import { posRot } from "./positions-rotations.js"
+import calculatePosRot from "./pos-rot.js"
+import includeTable from "./table.js"
+import includeColumn from "./column.js"
+import { posRot } from "./pos-rot.js"
+var participants = {};
+window.participants = participants;
 
-let camera, controls, noP, socialDistance;
+let camera, controls, noP, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
 
 export default function setupCamera() {
-
-	socialDistance = 0.67;
-	noP = 5;
-	//let allPosRot = CalculatePositionsRotations( noP, socialDistance )
-	//participantPositions = allPosRot[0]
-	//participantRotations = allPosRot[1]
-	
-	//let cameraZPos = 1 * CalculateCameraPosition( noP )
+	noP = 10
+	let table = includeTable(radius, 32, 0)
+	let column = includeColumn()
+	participants.group = new THREE.Group();
+	participants.group.add( table );
+	participants.group.add( column );
+	calculatePosRot(noP)
 	camera = new THREE.PerspectiveCamera(
-		posRot[noP][0].fov,
+		posRot[noP].camera.fov,
 		window.innerWidth / window.innerHeight,
 		0.01,
 		100
 	);
-	//let variableCameraPos = CalculateCameraPosition()
-	camera.position.set(0, 1.69, socialDistance*posRot[noP][0].z);
-
+	camera.position.set(0, posRot[noP].camera.y, posRot[noP].camera.z);
 	controls = new OrbitControls(camera, renderer.domElement);
-	controls.target.set(0, 1.59, 0);
+	controls.target.set(0, posRot[noP].camera.yFocus, 0);
 	controls.update();
-
 }
 
-export { camera, noP, socialDistance }
+function setupParticipants(noP) {
+}
+
+const setupSettings = {
+	cameraYPos: 1.69,
+	cameraFocY: 1.59,
+	3: {
+		radius: 0.5,
+		cameraZPos: 0.1,
+		cameraFov: 50,
+		angle: 2*Math.PI/3,
+	},
+	4: {
+		radius: 0.7,
+		cameraZPos: 0.25,
+		cameraFov: 50,
+		angle: 2*Math.PI/5,
+	},
+	5: {
+		radius: 0.75,
+		cameraZPos: 0.4,
+		cameraFov: 50,
+		angle: Math.PI/3,
+	},
+	6: {
+		radius: 0.8,
+		cameraZPos: 0.5,
+		cameraFov: 50,
+		angle: 2 * Math.PI/7,
+	},
+	7: {
+		radius: 0.85,
+		cameraZPos: 0.6,
+		cameraFov: 50,
+		angle: Math.PI/4,
+	},
+	8: {
+		radius: 0.95,
+		cameraZPos: 0.7,
+		cameraFov: 50,
+		angle: 2 *Math.PI/9,
+	},
+	9: {
+		radius: 1.05,
+		cameraZPos: 0.8,
+		cameraFov: 50,
+		angle: Math.PI/5,
+	},
+	10: {
+		radius: 1.20,
+		cameraZPos: 0.9,
+		cameraFov: 50,
+		angle: 2*Math.PI/11,
+	}
+}
+window.setupSettings = setupSettings
+export { camera, noP, participants, setupSettings }
