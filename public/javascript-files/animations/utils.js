@@ -5,22 +5,22 @@ window.beginAction = beginAction;
 window.synchronizeCrossFade = synchronizeCrossFade;
 window.getActionFromName = getActionFromName;
 
-export default function beginAction(actionName) {
-	let action = getActionFromName(actionName);
-	resetAllActionWeights()
-	setWeight(action, 1);
+export default function beginAction(actionName, pNo) {
+	let action = getActionFromName(actionName, pNo);
+	resetAllActionWeights(pNo)
+	setWeight(action, 0.2);
 	action.play();
 }
 
-function resetAllActionWeights() {
-	allActions.forEach( function(a) {
+function resetAllActionWeights(pNo) {
+	participants[pNo]['allActions'].forEach( function(a) {
 		a.setEffectiveWeight(0)
 	})
 	return
 }
 
-function getActionFromName(actionName) {
-	let action_ =  allActions.find(obj => {
+function getActionFromName(actionName, pNo) {
+	let action_ =  participants[pNo]['allActions'].find(obj => {
 		return obj._clip.name === actionName
 	})
 	return action_

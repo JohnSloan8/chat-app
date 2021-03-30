@@ -5,19 +5,16 @@ import calculatePosRot from "./pos-rot.js"
 import includeTable from "./table.js"
 import includeColumn from "./column.js"
 import { posRot } from "./pos-rot.js"
-var participants = {};
-window.participants = participants;
-
-let camera, controls, noP, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
+let camera, group, controls, noP, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
 
 export default function setupCamera() {
-	noP = 5
+	noP = 3
 	calculatePosRot(noP)
 	let table = includeTable(setupSettings[noP].radius, 32, 0)
 	let column = includeColumn()
-	participants.group = new THREE.Group();
-	participants.group.add( table );
-	participants.group.add( column );
+	group = new THREE.Group();
+	group.add( table );
+	group.add( column );
 	camera = new THREE.PerspectiveCamera(
 		posRot[noP].camera.fov,
 		window.innerWidth / window.innerHeight,
@@ -30,12 +27,15 @@ export default function setupCamera() {
 	controls.update();
 }
 
-function setupParticipants(noP) {
-}
-
 const setupSettings = {
 	cameraYPos: 1.69,
 	cameraFocY: 1.59,
+	2: {
+		radius: 0.5,
+		cameraZPos: 0.2,
+		cameraFov: 40,
+		angle: 0,
+	},
 	3: {
 		radius: 0.5,
 		cameraZPos: 0.4,
@@ -86,4 +86,4 @@ const setupSettings = {
 	}
 }
 window.setupSettings = setupSettings
-export { camera, noP, participants, setupSettings }
+export { camera, noP, group, setupSettings }
