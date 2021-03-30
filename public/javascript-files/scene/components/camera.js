@@ -11,7 +11,7 @@ export default function setupCamera() {
 	noP = 3
 	calculatePosRot(noP)
 	let table = includeTable(setupSettings[noP].radius, 32, 0)
-	let column = includeColumn()
+	let column = includeColumn(0.01, 10, 0.01, 0xaaaa11)
 	group = new THREE.Group();
 	group.add( table );
 	group.add( column );

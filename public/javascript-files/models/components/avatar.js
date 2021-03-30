@@ -4,6 +4,7 @@ import { scene } from "../../scene/components/scene.js";
 import { noP, group } from "../../scene/components/camera.js";
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
+import includeColumn from "../../scene/components/column.js"
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
@@ -18,15 +19,16 @@ export default function setupAvatar() {
 			gltf
 		) {
 			participants[i].model = gltf.scene;
-			participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
-			participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
-			group.add(participants[i].model);
 			participants[i].model.traverse(function(object) {
 				if (object.isMesh) {
 					object.castShadow = true;
 					object.frustumCulled = false;
 				}
 			});
+
+			participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
+			participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
+			group.add(participants[i].model);
 
 			skeleton = new THREE.SkeletonHelper(participants[i].model);
 			skeleton.visible = true;
@@ -42,6 +44,7 @@ export default function setupAvatar() {
 				name = clip.name;
 				action = participants[i].mixer.clipAction(clip);
 				action.setLoop( THREE.LoopOnce )
+				action.clampWhenFinished = true;
 				participants[i]['allActions'].push(action);
 			}
 		});
