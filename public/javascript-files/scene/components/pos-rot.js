@@ -76,6 +76,9 @@ export default function calculatePosRot(noP) {
 				rot = 0;
 			}
 			//console.log('rot:', rot)
+			if ( rot > Math.PI ) {
+				rot -= 2 * Math.PI
+			}
 			posRot[noP][j].rotations.push(rot);
 		}
 	}
