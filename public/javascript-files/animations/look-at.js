@@ -5,23 +5,32 @@ import { noP } from "../scene/components/camera.js";
 window.lookAt = lookAt;
 export default function lookAt(a, b, speed) {
 	let angle = getAngle(a, b)
-	console.log('angle:', angle)
-	let leftOrRight = (angle > 0) ? "look-left" : "look-right"
-	console.log('leftOrRight:', leftOrRight)
-	let amount = (angle / (Math.PI/2))
-	console.log('amoun:', amount)
-	let action = getActionFromName(leftOrRight, a);
-	resetAllActionWeights(a)	
-	setWeight(action, amount);
-	action.play();
+	let lookAction = (angle > 0) ? 'look-left' : 'look-right'
+	let amount = Math.abs(angle/Math.PI)
+	if (amount !== 0 ) {
+		let startTime = (participants[a]['currentAngle'] - participants[a]['startAngle'])/Math.PI
+		if (angle<0){
+			startTime = 1-startTime
+		}
+		participants[a]['currentAngle'] += angle
+		console.log('angle:', angle)
+		console.log('lookAction:', lookAction)
+		console.log('amount:', amount)
+		console.log('startTime:', startTime)
+		let action = getActionFromName(lookAction, a);
+		resetAllActionWeights(a)	
+		setWeight(action, startTime, amount, speed);
+		action.play();
+	}
 }
 
 function getAngle(a, b) {
-	return posRot[noP][a].rotations[b] - posRot[noP][a].rotations[a]
+	return posRot[noP][a].rotations[b] - participants[a].currentAngle
 }
 
 function resetAllActionWeights(pNo) {
 	participants[pNo]['allActions'].forEach( function(part) {
+		part.reset();
 		part.setEffectiveWeight(0)
 	})
 	return
@@ -34,8 +43,9 @@ function getActionFromName(actionName, pNo) {
 	return action_
 } 
 
-function setWeight(action, weight) {
+function setWeight(action, startTime, amount, speed) {
 	action.enabled = true;
-	action.setEffectiveTimeScale(1);
-	action.setEffectiveWeight(weight);
+	action.setEffectiveTimeScale(speed);
+  action.time = startTime;
+	action.setEffectiveWeight(amount);
 }

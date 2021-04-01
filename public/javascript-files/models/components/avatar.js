@@ -46,6 +46,8 @@ export default function setupAvatar() {
 				action.setLoop( THREE.LoopOnce )
 				action.clampWhenFinished = true;
 				participants[i]['allActions'].push(action);
+				participants[i]['currentAngle'] = posRot[noP][i].rotations[i] - Math.PI/2;
+				participants[i]['startAngle'] = posRot[noP][i].rotations[i] - Math.PI/2;
 			}
 		});
 	};

@@ -4,10 +4,10 @@ window.beginAction = beginAction;
 window.getActionFromName = getActionFromName;
 var playing
 
-export default function beginAction(actionName, pNo, amount, timeScale) {
+export default function beginAction(actionName, pNo, startTime, finishTime, timeScale) {
 	let action = getActionFromName(actionName, pNo);
 	resetAllActionWeights(pNo)
-	setWeight(action, amount, timeScale);
+	setWeight(action, startTime, finishTime, timeScale);
 	action.play();
 }
 
@@ -26,12 +26,15 @@ function getActionFromName(actionName, pNo) {
 	return action_
 } 
 
-function setWeight(action, weight, timeScale) {
+function setWeight(action, startTime, finishTime, timeScale) {
 	action.enabled = true;
-	if(timeScale === -1) {
-    action.time = action.getClip().duration;
-  }
+	//if(timeScale === -1) {
+    //action.time = action.getClip().duration;
+		//console.log('duration:', action.time)
+	//} else {
+		action.time = startTime
+	//}
 	action.setEffectiveTimeScale(timeScale);
-	action.setEffectiveWeight(weight);
+	action.setEffectiveWeight(finishTime);
 }
 
