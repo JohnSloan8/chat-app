@@ -8,7 +8,7 @@ export default function lookAt(a, b, speed) {
 	let lookAction = (angle > 0) ? 'look-left' : 'look-right'
 	let amount = Math.abs(angle/Math.PI)
 	if (amount !== 0 ) {
-		let startTime = (participants[a]['currentAngle'] - participants[a]['startAngle'])/Math.PI
+		let startTime = 0.5 + (participants[a]['currentAngle'] - participants[a]['startAngle'])/Math.PI
 		if (angle<0){
 			startTime = 1-startTime
 		}

@@ -15,7 +15,7 @@ export default function setupAvatar() {
 	for(let i=1; i<noP; i++) {
 		participants[i] = {}
 		gltfLoader = new GLTFLoader();
-		gltfLoader.load("javascript-files/models/resources/man.glb", function(
+		gltfLoader.load("javascript-files/models/resources/man-poses.glb", function(
 			gltf
 		) {
 			participants[i].model = gltf.scene;
@@ -45,9 +45,11 @@ export default function setupAvatar() {
 				action = participants[i].mixer.clipAction(clip);
 				action.setLoop( THREE.LoopOnce )
 				action.clampWhenFinished = true;
+				action.zeroSlopeAtStart = false
+				action.zeroSlopeAtEnd = false
 				participants[i]['allActions'].push(action);
-				participants[i]['currentAngle'] = posRot[noP][i].rotations[i] - Math.PI/2;
-				participants[i]['startAngle'] = posRot[noP][i].rotations[i] - Math.PI/2;
+				participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
+				participants[i]['startAngle'] = posRot[noP][i].rotations[i];
 			}
 		});
 	};
