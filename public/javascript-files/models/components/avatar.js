@@ -43,13 +43,17 @@ export default function setupAvatar() {
 				clip = animations[j];
 				name = clip.name;
 				action = participants[i].mixer.clipAction(clip);
-				action.setLoop( THREE.LoopOnce )
-				action.clampWhenFinished = true;
-				action.zeroSlopeAtStart = false
-				action.zeroSlopeAtEnd = false
+				//action.setLoop( THREE.LoopOnce )
+				//action.clampWhenFinished = true;
 				participants[i]['allActions'].push(action);
 				participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
 				participants[i]['startAngle'] = posRot[noP][i].rotations[i];
+
+				if (clip.name.endsWith( '_pose' )) {
+					action.setEffectiveWeight(0)
+					//THREE.AnimationUtils.makeClipAdditive( clip );
+				}
+				action.play()
 			}
 		});
 	};

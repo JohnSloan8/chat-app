@@ -13,12 +13,12 @@ export default function beginAction(
 ) {
 	let action = getActionFromName(actionName, pNo);
 	resetAllActionWeights(pNo);
-	//action.setEffectiveWeight(0.3)
+	action.setEffectiveWeight(0.3)
 	console.log('isRunning:', action.isRunning())
 	console.log('action:', action)
-	setWeight(action, startTime, weight, timeScale);
-	action.play().fadeIn(weight)
+	//setWeight(action, startTime, weight, timeScale);
 	//action.fadeIn(weight)
+	action.fadeTo(0.8)
 }
 
 function resetAllActionWeights(pNo) {
