@@ -8,14 +8,15 @@ import includeColumn from "../../scene/components/column.js"
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
-window.participants = participants;
+var avatars = ['avatar-man-1', 'avatar-man-2', 'avatar-man-3', 'avatar-woman-1', 'avatar-woman-2', 'avatar-woman-3', ]
 
 export default function setupAvatar() {
 
 	for(let i=1; i<noP; i++) {
 		participants[i] = {}
 		gltfLoader = new GLTFLoader();
-		gltfLoader.load("javascript-files/models/resources/man-poses.glb", function(
+		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
+		gltfLoader.load("javascript-files/models/resources/" + randAvatar + ".glb", function(
 			gltf
 		) {
 			participants[i].model = gltf.scene;

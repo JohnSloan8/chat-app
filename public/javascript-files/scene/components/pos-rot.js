@@ -51,8 +51,6 @@ export default function calculatePosRot(noP) {
 					rot += Math.PI
 				}
 			} else if (xDiff === 0) {
-				console.log('j:', j)
-				console.log('k:', k)
 				rot = Math.PI
 				if (zDiff > 0) {
 					rot = 0
