@@ -14,7 +14,7 @@ const baseActions = {
 	//idle: { weight: 1 },
 };
 const additiveActions = {
-	neutral_pose: { weight: 0 },
+	neutral_arms_pose: { weight: 1 },
 	left_up_pose: { weight: 0 },
 	left_down_pose: { weight: 0 },
 	right_up_pose: { weight: 0 },
@@ -24,7 +24,7 @@ const additiveActions = {
 let avatarCount = 1
 export default function setupAvatar() {
 
-	loadIndividualGLTF('avatar-man-1-edited-no-idle', avatarCount, iterateAvatar)
+	loadIndividualGLTF('avatar-man-1-edited-a-frame', avatarCount, iterateAvatar)
 
 	scene.add( group )
 }
