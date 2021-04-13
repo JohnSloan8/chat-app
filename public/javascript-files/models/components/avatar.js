@@ -8,60 +8,115 @@ import includeColumn from "../../scene/components/column.js"
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
-var avatars = ['avatar-man-1', 'avatar-man-2', 'avatar-man-3', 'avatar-woman-1', 'avatar-woman-2', 'avatar-woman-3', ]
+window.participants = participants
+var avatars = ['avatar-man-2', 'avatar-man-3', 'avatar-woman-1', 'avatar-woman-2', 'avatar-woman-3', ]
+const baseActions = {
+	//idle: { weight: 1 },
+};
+const additiveActions = {
+	neutral_pose: { weight: 0 },
+	left_up_pose: { weight: 0 },
+	left_down_pose: { weight: 0 },
+	right_up_pose: { weight: 0 },
+	right_down_pose: { weight: 0 },
+};
 
+let avatarCount = 1
 export default function setupAvatar() {
 
-	for(let i=1; i<noP; i++) {
-		participants[i] = {}
-		gltfLoader = new GLTFLoader();
-		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
-		gltfLoader.load("javascript-files/models/resources/" + randAvatar + ".glb", function(
-			gltf
-		) {
-			participants[i].model = gltf.scene;
-			participants[i].model.traverse(function(object) {
-				if (object.isMesh) {
-					object.castShadow = true;
-					object.frustumCulled = false;
-				}
-			});
-
-			participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
-			participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
-			group.add(participants[i].model);
-
-			skeleton = new THREE.SkeletonHelper(participants[i].model);
-			skeleton.visible = true;
-			scene.add(skeleton);
-
-			animations = gltf.animations;
-			participants[i].mixer = new THREE.AnimationMixer(participants[i].model);
-			numAnimations = animations.length;
-
-			participants[i]['allActions'] = [];
-			for (let j = 0; j !== numAnimations; ++j) {
-				clip = animations[j];
-				name = clip.name;
-				action = participants[i].mixer.clipAction(clip);
-				//action.setLoop( THREE.LoopOnce )
-				//action.clampWhenFinished = true;
-				participants[i]['allActions'].push(action);
-				participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
-				participants[i]['startAngle'] = posRot[noP][i].rotations[i];
-
-				if (clip.name.endsWith( '_pose' )) {
-					action.setEffectiveWeight(0)
-					//THREE.AnimationUtils.makeClipAdditive( clip );
-				}
-				action.play()
-			}
-		});
-	};
+	loadIndividualGLTF('avatar-man-1-edited-no-idle', avatarCount, iterateAvatar)
 
 	scene.add( group )
-	//beginAction("stand");
-	animate();
+}
+
+function iterateAvatar() {
+
+	avatarCount += 1;
+	if (avatarCount < noP) {
+		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
+		loadIndividualGLTF(randAvatar, avatarCount, iterateAvatar)
+	} else {
+		animate()
+	};
+
+}
+
+function loadIndividualGLTF(avatarName, i, cb=null) {
+
+	gltfLoader = new GLTFLoader();
+	gltfLoader.load("javascript-files/models/resources/" + avatarName + ".glb", function(
+		gltf
+	) {
+		participants[i] = {}
+		participants[i].model = gltf.scene;
+		participants[i].model.traverse(function(object) {
+			if (object.isMesh) {
+				object.castShadow = true;
+				object.frustumCulled = false;
+			}
+		});
+		participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
+		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
+		group.add(participants[i].model);
+		let face = participants[i].model.getObjectByName( 'Wolf3D_Head' );
+		//console.log('face:', face)
+		const expressions = Object.keys( face.morphTargetDictionary )
+		//console.log('expressions:', expressions)
+		skeleton = new THREE.SkeletonHelper(participants[i].model);
+		skeleton.visible = true;
+		scene.add(skeleton);
+		if (avatarCount === 1) {
+			animations = gltf.animations;
+		}
+		console.log('animations:', animations)
+		participants[i].mixer = new THREE.AnimationMixer(participants[i].model);
+		numAnimations = animations.length;
+		participants[i]['allActions'] = [];
+		for (let j = 0; j !== numAnimations; ++j) {
+			clip = animations[j].clone();
+			name = clip.name;
+			if ( baseActions[ name ] ) {
+				const action = participants[i].mixer.clipAction( clip );
+				activateAction( action );
+				baseActions[ name ].action = action;
+				participants[i]['allActions'].push(action);
+			} else if ( additiveActions[ name ] ) {
+				// Make the clip additive and remove the reference frame
+				THREE.AnimationUtils.makeClipAdditive( clip );
+				if ( clip.name.endsWith( '_pose' ) ) {
+					clip = THREE.AnimationUtils.subclip( clip, clip.name, 2, 3, 30 );
+				}
+				const action = participants[i].mixer.clipAction( clip );
+				activateAction( action );
+				additiveActions[ name ].action = action;
+				participants[i]['allActions'].push(action);
+			}
+		}
+		participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
+		participants[i]['startAngle'] = posRot[noP][i].rotations[i];
+		if (cb) {
+			console.log('in callback')
+			cb();
+		}
+	});
+
+}
+
+function activateAction( action ) {
+
+	const clip = action.getClip();
+	const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
+	setWeight( action, settings.weight );
+	action.play();
+
+}
+
+function setWeight( action, weight ) {
+
+	action.enabled = true;
+	action.setEffectiveTimeScale( 1 );
+	action.setEffectiveWeight( weight );
+
 }
 
 export { participants }
