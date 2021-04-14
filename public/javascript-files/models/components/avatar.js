@@ -36,14 +36,14 @@ function iterateAvatar() {
 		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
 		loadIndividualGLTF(randAvatar, avatarCount, iterateAvatar)
 	} else {
-		//scene.updateMatrixWorld(true);
 		for (let j=1; j<noP; j++) {
 			participants[j].model.traverse(function(object) {
 				//console.log('name:', object.name)
 				if (object.name === "RightEye") {
-					let direction = new THREE.Vector3();
-					let position = object.getWorldPosition(direction)
-					console.log(position.x + ',' + position.y + ',' + position.z);
+					//let direction = new THREE.Vector3();
+					//let position = object.getWorldPosition(direction)
+					//console.log(position.x + ',' + position.y + ',' + position.z);
+					object.lookAt(0.2866225747437305,1.615352232842075,-0.5667132320422056)
 				}
 			})
 		}
