@@ -14,7 +14,7 @@ const baseActions = {
 	//idle: { weight: 1 },
 };
 const additiveActions = {
-	neutral_arms_pose: { weight: 1 },
+	neutral_arm_pose: { weight: 1 },
 	left_up_pose: { weight: 0 },
 	left_down_pose: { weight: 0 },
 	right_up_pose: { weight: 0 },
@@ -36,6 +36,17 @@ function iterateAvatar() {
 		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
 		loadIndividualGLTF(randAvatar, avatarCount, iterateAvatar)
 	} else {
+		//scene.updateMatrixWorld(true);
+		for (let j=1; j<noP; j++) {
+			participants[j].model.traverse(function(object) {
+				//console.log('name:', object.name)
+				if (object.name === "RightEye") {
+					let direction = new THREE.Vector3();
+					let position = object.getWorldPosition(direction)
+					console.log(position.x + ',' + position.y + ',' + position.z);
+				}
+			})
+		}
 		animate()
 	};
 
@@ -49,15 +60,21 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 	) {
 		participants[i] = {}
 		participants[i].model = gltf.scene;
+		participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
+		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
+		if(i===2) {
+			participants[i].model.scale.set(1, 0.6, 1);
+		}
+		group.add(participants[i].model);
 		participants[i].model.traverse(function(object) {
 			if (object.isMesh) {
 				object.castShadow = true;
 				object.frustumCulled = false;
+				//console.log('object:', object);
 			}
 		});
-		participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
-		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
-		group.add(participants[i].model);
+		//var box = new THREE.Box3().setFromObject( participants[i].model );
+		//console.log( box.getSize() )
 		let face = participants[i].model.getObjectByName( 'Wolf3D_Head' );
 		//console.log('face:', face)
 		const expressions = Object.keys( face.morphTargetDictionary )
