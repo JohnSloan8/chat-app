@@ -5,6 +5,7 @@ import { noP, group } from "../../scene/components/camera.js";
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
 import includeColumn from "../../scene/components/column.js"
+import runTestAnimationSequence from '../../animations/test.js'
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
@@ -136,36 +137,53 @@ function calculateLookAngles() {
 		//}
 	//})
 	for (let i=1; i<noP; i++) {
+		participants[i].movableBodyParts = {}
 		participants[i].model.traverse(function(object) {
 			if (object.name === "Head") {
-				participants[i].head = object;
+				participants[i].movableBodyParts.head = object;
+			} else if (object.name === "Spine1") {
+				participants[i].movableBodyParts.spine1 = object;
+			} else if (object.name === "Spine2") {
+				participants[i].movableBodyParts.spine2 = object;
 			} else if (object.name === "LeftEye") {
-				participants[i].leftEye = object;
+				participants[i].movableBodyParts.leftEye = object;
 			} else if (object.name === "RightEye") {
-				participants[i].rightEye = object;
+				participants[i].movableBodyParts.rightEye = object;
 			}
 		})
 	}
+	let headMult = 0.7;
+	let spine2Mult = 0.15;
+	let spine1Mult = 0.075;
 	for (let j=1; j<noP; j++) {
-		participants[j].headRotations = []
+		participants[j].rotations =  {}
 		for (let k=0; k<noP; k++) {
-			if (k===0) {
-				participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
-				participants[j].headRotations.push({x:participants[j].head.rotation.x, y:participants[j].head.rotation.y, z:participants[j].head.rotation.z})
-			} else if (j===k) {
-				participants[j].headRotations.push({_x: 0, _y: 0, _z: 0})
+			if (j===k) {
+				participants[j].rotations[k] = {
+					head: {x: 0, y: 0, z: 0},
+					spine2: {x: 0, y: 0, z: 0},
+					spine1: {x: 0, y: 0, z: 0}
+				}
 			} else {
-				let direction = new THREE.Vector3();
-				let leftEyePos = participants[k].leftEye.getWorldPosition(direction)
-				participants[j].head.lookAt(leftEyePos)
-				participants[j].headRotations.push({x:participants[j].head.rotation.x, y:participants[j].head.rotation.y, z:participants[j].head.rotation.z})
+				participants[j].rotations[k] = {}
+				if (k===0) {
+					participants[j].movableBodyParts.head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
+				} else {
+					let direction = new THREE.Vector3();
+					let leftEyePos = participants[k].movableBodyParts.leftEye.getWorldPosition(direction)
+					participants[j].movableBodyParts.head.lookAt(leftEyePos)
+				}
+				participants[j].rotations[k].head = {x:participants[j].movableBodyParts.head.rotation.x*headMult, y:participants[j].movableBodyParts.head.rotation.y*headMult, z:participants[j].movableBodyParts.head.rotation.z*headMult}
+				participants[j].rotations[k].spine2 = {x:participants[j].movableBodyParts.head.rotation.x*spine2Mult, y:participants[j].movableBodyParts.head.rotation.y*spine2Mult, z:participants[j].movableBodyParts.head.rotation.z*spine2Mult}
+				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult}
 			}
 		}
 		//participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
-		participants[j].head.lookAt(0, 1, 0)
+		participants[j].movableBodyParts.head.lookAt(0, 1, 0)
 		//participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
 	}
 	animate()
+	runTestAnimationSequence();
 }
 
 export { participants }

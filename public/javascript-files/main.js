@@ -26,13 +26,8 @@ function animate() {
 	stats.update();
 
 	TWEEN.update()
-	//move();
 
 	renderer.render(scene, camera);
-}
-
-function move() {
-
 }
 
 export { animate }
