@@ -1,6 +1,7 @@
 import { participants } from "../models/components/avatar.js"
 import { posRot } from "../scene/components/pos-rot.js"
 import { noP } from "../scene/components/camera.js";
+import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
 window.avatarLookAt = avatarLookAt
 export default function avatarLookAt(who, toWhom) {

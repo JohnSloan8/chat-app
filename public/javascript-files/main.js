@@ -7,6 +7,7 @@ import loadScene from "./scene/load-scene.js"
 import loadModels from "./models/load-models.js"
 import beginAction from "./animations/utils.js"
 import avatarLookAt from "./animations/look.js"
+import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
 init();
 
