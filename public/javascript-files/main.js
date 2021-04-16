@@ -6,7 +6,7 @@ import { participants } from "./models/components/avatar.js"
 import loadScene from "./scene/load-scene.js"
 import loadModels from "./models/load-models.js"
 import beginAction from "./animations/utils.js"
-import lookAt from "./animations/look-at.js"
+import avatarLookAt from "./animations/look.js"
 
 init();
 
@@ -24,7 +24,8 @@ function animate() {
 	})
 	stats.update();
 
-	move();
+	TWEEN.update()
+	//move();
 
 	renderer.render(scene, camera);
 }

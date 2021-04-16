@@ -36,18 +36,7 @@ function iterateAvatar() {
 		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
 		loadIndividualGLTF(randAvatar, avatarCount, iterateAvatar)
 	} else {
-		for (let j=1; j<noP; j++) {
-			participants[j].model.traverse(function(object) {
-				//console.log('name:', object.name)
-				if (object.name === "RightEye") {
-					//let direction = new THREE.Vector3();
-					//let position = object.getWorldPosition(direction)
-					//console.log(position.x + ',' + position.y + ',' + position.z);
-					object.lookAt(0.2866225747437305,1.615352232842075,-0.5667132320422056)
-				}
-			})
-		}
-		animate()
+		calculateLookAngles();
 	};
 
 }
@@ -60,10 +49,10 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 	) {
 		participants[i] = {}
 		participants[i].model = gltf.scene;
-		participants[i].model.rotation.set(0, posRot[noP][i].rotations[i], 0);
+		participants[i].model.rotation.set(0, posRot[noP][i].neutralYrotation, 0);
 		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
 		if(i===2) {
-			participants[i].model.scale.set(1, 0.6, 1);
+			participants[i].model.scale.set(1, 0.9, 1);
 		}
 		group.add(participants[i].model);
 		participants[i].model.traverse(function(object) {
@@ -85,7 +74,7 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		if (avatarCount === 1) {
 			animations = gltf.animations;
 		}
-		console.log('animations:', animations)
+		//console.log('animations:', animations)
 		participants[i].mixer = new THREE.AnimationMixer(participants[i].model);
 		numAnimations = animations.length;
 		participants[i]['allActions'] = [];
@@ -109,10 +98,10 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 				participants[i]['allActions'].push(action);
 			}
 		}
-		participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
-		participants[i]['startAngle'] = posRot[noP][i].rotations[i];
+		//participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
+		//participants[i]['startAngle'] = posRot[noP][i].rotations[i];
 		if (cb) {
-			console.log('in callback')
+			//console.log('in callback')
 			cb();
 		}
 	});
@@ -134,6 +123,49 @@ function setWeight( action, weight ) {
 	action.setEffectiveTimeScale( 1 );
 	action.setEffectiveWeight( weight );
 
+}
+
+function calculateLookAngles() {
+	//participants[2].model.traverse(function(object) {
+		////console.log('name:', object.name)
+		//if (object.name === "LeftEye") {
+			//let direction = new THREE.Vector3();
+			//eye_pos = object.getWorldPosition(direction)
+			//window.eyePos = eye_pos;
+			////console.log('eye_pos:', eye_pos);
+		//}
+	//})
+	for (let i=1; i<noP; i++) {
+		participants[i].model.traverse(function(object) {
+			if (object.name === "Head") {
+				participants[i].head = object;
+			} else if (object.name === "LeftEye") {
+				participants[i].leftEye = object;
+			} else if (object.name === "RightEye") {
+				participants[i].rightEye = object;
+			}
+		})
+	}
+	for (let j=1; j<noP; j++) {
+		participants[j].headRotations = []
+		for (let k=0; k<noP; k++) {
+			if (k===0) {
+				participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
+				participants[j].headRotations.push({x:participants[j].head.rotation.x, y:participants[j].head.rotation.y, z:participants[j].head.rotation.z})
+			} else if (j===k) {
+				participants[j].headRotations.push({_x: 0, _y: 0, _z: 0})
+			} else {
+				let direction = new THREE.Vector3();
+				let leftEyePos = participants[k].leftEye.getWorldPosition(direction)
+				participants[j].head.lookAt(leftEyePos)
+				participants[j].headRotations.push({x:participants[j].head.rotation.x, y:participants[j].head.rotation.y, z:participants[j].head.rotation.z})
+			}
+		}
+		//participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
+		participants[j].head.lookAt(0, 1, 0)
+		//participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
+	}
+	animate()
 }
 
 export { participants }

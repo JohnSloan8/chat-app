@@ -24,62 +24,60 @@ export default function calculatePosRot(noP) {
 		posRot[noP][i] = {
 			x: Math.round(1000 * setupSettings[noP].radius * Math.sin(-curAng))/1000,
 			z: Math.round(1000 * -setupSettings[noP].radius * Math.cos(curAng))/1000,
-			//x: rad * Math.sin(-curAng),
-			//z: -rad * Math.cos(curAng),
-			rotations: []
+			neutralYrotation: curAng
 		}
 		curAng -= setupSettings[noP].angle;
 	}
-	let xDiff;
-	let zDiff;
-	for (let j=1; j<noP; j++) {
-		for (let k=0; k<noP; k++) {
-			if (k === 0) {
-				xDiff = posRot[noP]['camera'].x - posRot[noP][j].x 
-				zDiff = posRot[noP]['camera'].z - posRot[noP][j].z 
-			} else {
-				xDiff = posRot[noP][k].x - posRot[noP][j].x 
-				zDiff = posRot[noP][k].z - posRot[noP][j].z 
-			}	
+	//let xDiff;
+	//let zDiff;
+	//for (let j=1; j<noP; j++) {
+		//for (let k=0; k<noP; k++) {
+			//if (k === 0) {
+				//xDiff = posRot[noP]['camera'].x - posRot[noP][j].x 
+				//zDiff = posRot[noP]['camera'].z - posRot[noP][j].z 
+			//} else {
+				//xDiff = posRot[noP][k].x - posRot[noP][j].x 
+				//zDiff = posRot[noP][k].z - posRot[noP][j].z 
+			//}	
 
-			//console.log('xDiff:', xDiff)
-			//console.log('zDiff:', zDiff)
-			let rot
-			if (xDiff === 0 && zDiff === 0 ) {
-				rot = Math.atan(posRot[noP][j].x/posRot[noP][j].z)
-				if (posRot[noP][j].z > 0) {
-					rot += Math.PI
-				}
-			} else if (xDiff === 0) {
-				rot = Math.PI
-				if (zDiff > 0) {
-					rot = 0
-				}
-			} else if (zDiff === 0) {
-				rot = Math.PI/2
-				if (xDiff < 0) {
-					rot = -Math.PI/2
-				}
-			} else {
-				rot = Math.atan(xDiff/zDiff)
-			}
+			////console.log('xDiff:', xDiff)
+			////console.log('zDiff:', zDiff)
+			//let rot
+			//if (xDiff === 0 && zDiff === 0 ) {
+				//rot = Math.atan(posRot[noP][j].x/posRot[noP][j].z)
+				//if (posRot[noP][j].z > 0) {
+					//rot += Math.PI
+				//}
+			//} else if (xDiff === 0) {
+				//rot = Math.PI
+				//if (zDiff > 0) {
+					//rot = 0
+				//}
+			//} else if (zDiff === 0) {
+				//rot = Math.PI/2
+				//if (xDiff < 0) {
+					//rot = -Math.PI/2
+				//}
+			//} else {
+				//rot = Math.atan(xDiff/zDiff)
+			//}
 
-			if ( zDiff < 0 && xDiff !== 0 ) {
-				rot += Math.PI
-			}
+			//if ( zDiff < 0 && xDiff !== 0 ) {
+				//rot += Math.PI
+			//}
 
-			if (isNaN(rot)) {
-			console.log('j:', j)
-			console.log('k:', k)
-				rot = 0;
-			}
-			//console.log('rot:', rot)
-			if ( rot > Math.PI ) {
-				rot -= 2 * Math.PI
-			}
-			posRot[noP][j].rotations.push(rot);
-		}
-	}
+			//if (isNaN(rot)) {
+			//console.log('j:', j)
+			//console.log('k:', k)
+				//rot = 0;
+			//}
+			////console.log('rot:', rot)
+			//if ( rot > Math.PI ) {
+				//rot -= 2 * Math.PI
+			//}
+			//posRot[noP][j].rotations.push(rot);
+		//}
+	//}
 	return posRot
 }
 
