@@ -65,17 +65,13 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		});
 		//var box = new THREE.Box3().setFromObject( participants[i].model );
 		//console.log( box.getSize() )
-		let face = participants[i].model.getObjectByName( 'Wolf3D_Head' );
-		//console.log('face:', face)
-		const expressions = Object.keys( face.morphTargetDictionary )
-		//console.log('expressions:', expressions)
-		skeleton = new THREE.SkeletonHelper(participants[i].model);
-		skeleton.visible = true;
-		scene.add(skeleton);
+		addMovableBodyParts(i)
+		//skeleton = new THREE.SkeletonHelper(participants[i].model);
+		//skeleton.visible = true;
+		//scene.add(skeleton);
 		if (avatarCount === 1) {
 			animations = gltf.animations;
 		}
-		//console.log('animations:', animations)
 		participants[i].mixer = new THREE.AnimationMixer(participants[i].model);
 		numAnimations = animations.length;
 		participants[i]['allActions'] = [];
@@ -126,32 +122,26 @@ function setWeight( action, weight ) {
 
 }
 
+function addMovableBodyParts(i) {
+	participants[i].movableBodyParts = {}
+	participants[i].model.traverse(function(object) {
+		if (object.name === "Head") {
+			participants[i].movableBodyParts.head = object;
+		} else if (object.name === "Spine1") {
+			participants[i].movableBodyParts.spine1 = object;
+		} else if (object.name === "Spine2") {
+			participants[i].movableBodyParts.spine2 = object;
+		} else if (object.name === "LeftEye") {
+			participants[i].movableBodyParts.leftEye = object;
+		} else if (object.name === "RightEye") {
+			participants[i].movableBodyParts.rightEye = object;
+		} else if  (object.name === "Wolf3D_Head") {
+			participants[i].movableBodyParts.face = object;
+		}
+	})
+}
+
 function calculateLookAngles() {
-	//participants[2].model.traverse(function(object) {
-		////console.log('name:', object.name)
-		//if (object.name === "LeftEye") {
-			//let direction = new THREE.Vector3();
-			//eye_pos = object.getWorldPosition(direction)
-			//window.eyePos = eye_pos;
-			////console.log('eye_pos:', eye_pos);
-		//}
-	//})
-	for (let i=1; i<noP; i++) {
-		participants[i].movableBodyParts = {}
-		participants[i].model.traverse(function(object) {
-			if (object.name === "Head") {
-				participants[i].movableBodyParts.head = object;
-			} else if (object.name === "Spine1") {
-				participants[i].movableBodyParts.spine1 = object;
-			} else if (object.name === "Spine2") {
-				participants[i].movableBodyParts.spine2 = object;
-			} else if (object.name === "LeftEye") {
-				participants[i].movableBodyParts.leftEye = object;
-			} else if (object.name === "RightEye") {
-				participants[i].movableBodyParts.rightEye = object;
-			}
-		})
-	}
 	let headMult = 0.7;
 	let spine2Mult = 0.15;
 	let spine1Mult = 0.075;
@@ -178,12 +168,10 @@ function calculateLookAngles() {
 				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult}
 			}
 		}
-		//participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
-		participants[j].movableBodyParts.head.lookAt(0, 1, 0)
-		//participants[j].head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
 	}
 	animate()
-	runTestAnimationSequence();
+	avatarLookAt(1, 0, 1000)
+	//runTestAnimationSequence();
 }
 
 export { participants }

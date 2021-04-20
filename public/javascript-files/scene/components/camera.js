@@ -8,13 +8,13 @@ import { posRot } from "./pos-rot.js"
 let camera, group, controls, noP, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
 
 export default function setupCamera() {
-	noP = 7
+	noP = 2
 	calculatePosRot(noP)
 	let table = includeTable(setupSettings[noP].radius, 32, 0)
-	let column = includeColumn(0.01, 10, 0.01, 0xaaaa11)
+	//let column = includeColumn(0.01, 10, 0.01, 0xaaaa11)
 	group = new THREE.Group();
 	group.add( table );
-	group.add( column );
+	//group.add( column );
 	camera = new THREE.PerspectiveCamera(
 		posRot[noP].camera.fov,
 		window.innerWidth / window.innerHeight,

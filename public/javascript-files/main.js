@@ -7,6 +7,7 @@ import loadScene from "./scene/load-scene.js"
 import loadModels from "./models/load-models.js"
 import beginAction from "./animations/utils.js"
 import avatarLookAt from "./animations/look.js"
+import avatarMorph from "./animations/morph.js"
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
 init();
@@ -18,16 +19,20 @@ function init() {
 
 
 function animate() {
-	requestAnimationFrame(animate);
-	const mixerUpdateDelta = clock.getDelta();
-	Object.values(participants).forEach( function(p) {
-		p.mixer.update(mixerUpdateDelta);
-	})
-	stats.update();
+	try {
+		requestAnimationFrame(animate);
+		const mixerUpdateDelta = clock.getDelta();
+		Object.values(participants).forEach( function(p) {
+			p.mixer.update(mixerUpdateDelta);
+		})
+		stats.update();
 
-	TWEEN.update()
+		TWEEN.update()
 
-	renderer.render(scene, camera);
+		renderer.render(scene, camera);
+	} catch {
+		alert('error')
+	}
 }
 
 export { animate }

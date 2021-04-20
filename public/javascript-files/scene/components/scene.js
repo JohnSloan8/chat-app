@@ -20,8 +20,8 @@ export default function setupScene() {
 	container.appendChild(renderer.domElement);
 	container.appendChild(stats.dom);
 
-	const axesHelper = new THREE.AxesHelper( 5 );
-	scene.add( axesHelper );
+	//const axesHelper = new THREE.AxesHelper( 5 );
+	//scene.add( axesHelper );
 
 	window.addEventListener("resize", onWindowResize);
 }

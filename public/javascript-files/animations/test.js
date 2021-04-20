@@ -1,6 +1,7 @@
 import avatarLookAt from './look.js'
 import { noP } from "../scene/components/camera.js";
 
+window.runTestAnimationSequence = runTestAnimationSequence
 export default function runTestAnimationSequence() {
 	allLookAt(1)
 }
