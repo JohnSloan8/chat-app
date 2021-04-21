@@ -5,7 +5,7 @@ import { noP, group } from "../../scene/components/camera.js";
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
 import includeColumn from "../../scene/components/column.js"
-import runTestAnimationSequence from '../../animations/test.js'
+import initAnimations from '../../animations/init.js'
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
@@ -95,8 +95,6 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 				participants[i]['allActions'].push(action);
 			}
 		}
-		//participants[i]['currentAngle'] = posRot[noP][i].rotations[i];
-		//participants[i]['startAngle'] = posRot[noP][i].rotations[i];
 		if (cb) {
 			//console.log('in callback')
 			cb();
@@ -137,14 +135,17 @@ function addMovableBodyParts(i) {
 			participants[i].movableBodyParts.rightEye = object;
 		} else if  (object.name === "Wolf3D_Head") {
 			participants[i].movableBodyParts.face = object;
+		} else if  (object.name === "Spine") {
+			participants[i].movableBodyParts.spine = object;
 		}
 	})
 }
 
 function calculateLookAngles() {
-	let headMult = 0.7;
-	let spine2Mult = 0.15;
-	let spine1Mult = 0.075;
+	let headMult = 0.25;
+	let spine2Mult = 0.1;
+	let spine1Mult = 0.05;
+	let yMult = 2; //more rotation in y axis - avatars not leaning over each other!
 	for (let j=1; j<noP; j++) {
 		participants[j].rotations =  {}
 		for (let k=0; k<noP; k++) {
@@ -160,18 +161,17 @@ function calculateLookAngles() {
 					participants[j].movableBodyParts.head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
 				} else {
 					let direction = new THREE.Vector3();
-					let leftEyePos = participants[k].movableBodyParts.leftEye.getWorldPosition(direction)
-					participants[j].movableBodyParts.head.lookAt(leftEyePos)
+					let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
+					participants[j].movableBodyParts.head.lookAt(headPos)
 				}
-				participants[j].rotations[k].head = {x:participants[j].movableBodyParts.head.rotation.x*headMult, y:participants[j].movableBodyParts.head.rotation.y*headMult, z:participants[j].movableBodyParts.head.rotation.z*headMult}
-				participants[j].rotations[k].spine2 = {x:participants[j].movableBodyParts.head.rotation.x*spine2Mult, y:participants[j].movableBodyParts.head.rotation.y*spine2Mult, z:participants[j].movableBodyParts.head.rotation.z*spine2Mult}
-				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult}
+				participants[j].rotations[k].head = {x:participants[j].movableBodyParts.head.rotation.x*headMult, y:participants[j].movableBodyParts.head.rotation.y*headMult*yMult, z:participants[j].movableBodyParts.head.rotation.z*headMult}
+				participants[j].rotations[k].spine2 = {x:participants[j].movableBodyParts.head.rotation.x*spine2Mult, y:participants[j].movableBodyParts.head.rotation.y*spine2Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine2Mult}
+				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult}
 			}
 		}
 	}
 	animate()
-	avatarLookAt(1, 0, 1000)
-	//runTestAnimationSequence();
+	initAnimations();
 }
 
 export { participants }
