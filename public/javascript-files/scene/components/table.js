@@ -2,7 +2,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.mod
 
 export default function includeTable( rad, sides, zRot ) {
 	// add central pillar
-  const geometry = new THREE.CircleGeometry(rad-0.12, 32);
+  const geometry = new THREE.CircleGeometry(rad-0.15, 32);
 	const material = new THREE.MeshBasicMaterial( { color: 0xaa0a0a } );
 	const table = new THREE.Mesh( geometry, material );
 	table.rotation.set(-Math.PI/2, 0, 0)

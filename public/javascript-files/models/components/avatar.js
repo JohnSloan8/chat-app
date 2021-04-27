@@ -49,6 +49,7 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		gltf
 	) {
 		participants[i] = {}
+		participants[i].tweens = {}
 		participants[i].model = gltf.scene;
 		participants[i].model.rotation.set(0, posRot[noP][i].neutralYrotation, 0);
 		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
@@ -63,8 +64,6 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 				//console.log('object:', object);
 			}
 		});
-		//var box = new THREE.Box3().setFromObject( participants[i].model );
-		//console.log( box.getSize() )
 		addMovableBodyParts(i)
 		//skeleton = new THREE.SkeletonHelper(participants[i].model);
 		//skeleton.visible = true;
@@ -135,8 +134,11 @@ function addMovableBodyParts(i) {
 			participants[i].movableBodyParts.rightEye = object;
 		} else if  (object.name === "Wolf3D_Head") {
 			participants[i].movableBodyParts.face = object;
+			participants[i].blankFaceMorphTargets = Object.assign({}, object.morphTargetInfluences);
 		} else if  (object.name === "Spine") {
 			participants[i].movableBodyParts.spine = object;
+		} else if  (object.name === "Wolf3D_Teeth") {
+			participants[i].movableBodyParts.teeth = object;
 		}
 	})
 }
