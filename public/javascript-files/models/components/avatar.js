@@ -6,6 +6,7 @@ import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
 import includeColumn from "../../scene/components/column.js"
 import initAnimations from '../../animations/init.js'
+import prepareExpressions from '../../animations/morph/prepare.js'
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
@@ -175,7 +176,8 @@ function calculateLookAngles() {
 			}
 		}
 	}
-	testBufferGeom()
+	//testBufferGeom()
+	prepareExpressions()
 	animate()
 	initAnimations();
 }
