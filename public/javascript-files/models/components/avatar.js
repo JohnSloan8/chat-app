@@ -49,7 +49,9 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		gltf
 	) {
 		participants[i] = {}
-		participants[i].tweens = {}
+		participants[i].states = {
+			currentlyLookingAt: 0
+		}
 		participants[i].model = gltf.scene;
 		participants[i].model.rotation.set(0, posRot[noP][i].neutralYrotation, 0);
 		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
@@ -144,9 +146,9 @@ function addMovableBodyParts(i) {
 }
 
 function calculateLookAngles() {
-	let headMult = 0.25;
+	let headMult = 0.15;
 	let spine2Mult = 0.1;
-	let spine1Mult = 0.05;
+	let spine1Mult = 0.1;
 	let yMult = 2; //more rotation in y axis - avatars not leaning over each other!
 	for (let j=1; j<noP; j++) {
 		participants[j].rotations =  {}
@@ -169,9 +171,11 @@ function calculateLookAngles() {
 				participants[j].rotations[k].head = {x:participants[j].movableBodyParts.head.rotation.x*headMult, y:participants[j].movableBodyParts.head.rotation.y*headMult*yMult, z:participants[j].movableBodyParts.head.rotation.z*headMult}
 				participants[j].rotations[k].spine2 = {x:participants[j].movableBodyParts.head.rotation.x*spine2Mult, y:participants[j].movableBodyParts.head.rotation.y*spine2Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine2Mult}
 				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult}
+				participants[j].states.currentlyLookingAt = k
 			}
 		}
 	}
+	testBufferGeom()
 	animate()
 	initAnimations();
 }

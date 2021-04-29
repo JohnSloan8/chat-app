@@ -7,7 +7,8 @@ import loadScene from "./scene/load-scene.js"
 import loadModels from "./models/load-models.js"
 import beginAction from "./animations/utils.js"
 import avatarLookAt from "./animations/look.js"
-import { morph, blink, expression } from "./animations/morph/prepare.js"
+import avatarShake from "./animations/shake.js"
+import { morph, blink, expression, testBufferGeom } from "./animations/morph/prepare.js"
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
 init();
@@ -20,7 +21,6 @@ function init() {
 
 function animate() {
 	try {
-		requestAnimationFrame(animate);
 		const mixerUpdateDelta = clock.getDelta();
 		Object.values(participants).forEach( function(p) {
 			p.mixer.update(mixerUpdateDelta);
@@ -30,6 +30,7 @@ function animate() {
 		TWEEN.update()
 
 		renderer.render(scene, camera);
+		requestAnimationFrame(animate);
 	} catch(err) {
 		console.log('error:', err)
 	}

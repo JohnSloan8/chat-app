@@ -5,6 +5,36 @@ import easingDict from "../easings.js"
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
+
+window.testBufferGeom = testBufferGeom
+function testBufferGeom() {
+
+	let copyJawOpenPosition	= participants[2].movableBodyParts.face.geometry.morphAttributes.position[45].array
+	const newMorphTargetPosition = new THREE.Float32BufferAttribute( copyJawOpenPosition, 3 );
+	let copyJawOpenNormal	= participants[2].movableBodyParts.face.geometry.morphAttributes.normal[45].array
+	const newMorphTargetNormal = new THREE.Float32BufferAttribute( copyJawOpenNormal, 3 );
+
+	//let copyJawNormalPosition	= participants[1].movableBodyParts.face.geometry.morphAttributes.normal[45].array.slice()
+	//participants[1].movableBodyParts.face.geometry.setAttribute('position', new THREE.BufferAttribute(copyJawOpenPosition, 3))
+	//participants[1].movableBodyParts.face.geometry.setAttribute('normal', new THREE.BufferAttribute(copyJawNormalPosition, 3))
+	participants[2].movableBodyParts.face.geometry.morphAttributes.position = [...participants[2].movableBodyParts.face.geometry.morphAttributes.position, newMorphTargetPosition]
+	participants[2].movableBodyParts.face.geometry.morphAttributes.normal = [...participants[2].movableBodyParts.face.geometry.morphAttributes.normal, newMorphTargetNormal]
+	participants[2].movableBodyParts.face.morphTargetDictionary['surprise'] = 63
+	participants[2].movableBodyParts.face.morphTargetInfluences = [...participants[2].movableBodyParts.face.morphTargetInfluences, 0]
+	//participants[1].movableBodyParts.face.geometry.morphAttributes.normal.push(copyJawNormalPosition)
+	let eyeWideLeftPos = participants[2].movableBodyParts.face.geometry.morphAttributes.position[26].array  
+	let eyeWideLeftNor = participants[2].movableBodyParts.face.geometry.morphAttributes.normal[26].array  
+	//let eyeWideRightPos = participants[2].movableBodyParts.face.geometry.morphAttributes.position[27]  
+	//let eyeWideRightNor = participants[2].movableBodyParts.face.geometry.morphAttributes.normal[27]  
+	participants[2].movableBodyParts.face.geometry.morphAttributes.position[63].array = participants[2].movableBodyParts.face.geometry.morphAttributes.position[63].array.map(function(num, idx) {
+		return num + eyeWideLeftPos[idx]
+	}) 
+	participants[2].movableBodyParts.face.geometry.morphAttributes.normal[63].array = participants[2].movableBodyParts.face.geometry.morphAttributes.normal[63].array.map(function(num, idx) {
+		return num + eyeWideLeftNor[idx]
+	}) 
+	//participants[2].movableBodyParts.face.geometry.morphAttributes.normal[63] += eyeWideLeftNor
+}
+
 window.blink = blink
 function blink(who, amount=0.7, duration=200, easing="cubicOut") {
 
@@ -19,23 +49,10 @@ function blink(who, amount=0.7, duration=200, easing="cubicOut") {
 }
 
 const expressionMorphs = {
-	'smile': {
-		'morphs': {
-			"mouthSmile", 1
-		},
-		'duration': 1000,
+	"mouthSmile": {
 		'jaw': false
 	},
 	'surprise': {
-		'morphs': {
-			//["eyeWideLeft", 0.5],
-			//["eyeWideRight", 0.5],
-			"jawOpen": 0.8,
-			"browInnerUp": 0.8,
-			//["browOuterUpLeft", 1],
-			//["browOuterUpRight", 1]
-		],
-		'duration': 1000,
 		'jaw': true
 	}
 }
@@ -43,21 +60,31 @@ const expressionMorphs = {
 window.expression = expression
 function expression(who, e) {
 
+	let faceMorphsFrom = Object.assign({}, participants[who].blankFaceMorphTargets);
+	let faceMorphsHalf = Object.assign({}, participants[who].blankFaceMorphTargets);
 	let faceMorphsTo = Object.assign({}, participants[who].blankFaceMorphTargets);
+	faceMorphsTo[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1
+	faceMorphsHalf[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1/3
 	console.log('faceMorphsTo:', faceMorphsTo)
-	expressionMorphs[e].morphs.forEach( function(m) {
-		faceMorphsTo[participants[who].movableBodyParts.face.morphTargetDictionary[m[0]]] = m[1]
-	})
 
-	let f = new TWEEN.Tween(participants[who].movableBodyParts.face.morphTargetInfluences).to(faceMorphsTo, expressionMorphs[e].duration)
+	let expressionIn = new TWEEN.Tween(participants[who].movableBodyParts.face.morphTargetInfluences).to(faceMorphsTo, 500)
 		.easing(easingDict["cubicOut"])
-		.start()
+
+	let expressionOut = new TWEEN.Tween(participants[who].movableBodyParts.face.morphTargetInfluences).to(faceMorphsHalf, 1500)
+		.easing(easingDict["cubicOut"])
+		.delay(3000)
+	
+	expressionIn.chain(expressionOut)
+	expressionIn.start()
 
 	if ( expressionMorphs[e].jaw ) {
-		//let teethMorphsTo = Object.assign({}, participants[who].blankFaceMorphTargets);
-		//teethMorphsTo[21] = 1;
-		f.onStart( function() {
-			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": expressionMorphs[e].morphs['jawOpen']}, expressionMorphs[e].duration)
+		expressionIn.onStart( function() {
+			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": 1}, 500)
+			.easing(easingDict["cubicOut"])
+			.start()
+		})
+		expressionOut.onStart( function() {
+			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": 0}, 1500)
 			.easing(easingDict["cubicOut"])
 			.start()
 		})
@@ -78,4 +105,4 @@ function morph(who, target, amount, duration, easing="cubicOut") {
 		.start()
 }
 
-export {morph, blink, expression}
+export {morph, blink, expression, testBufferGeom}

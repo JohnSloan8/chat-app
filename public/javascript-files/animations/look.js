@@ -20,7 +20,8 @@ export default function avatarLookAt(who, toWhom, duration) {
 	head.start();
 	spine2.start();
 	spine1.start();
-	participants[who].tweens.blink()
+	participants[who].states.currentlyLookingAt = toWhom
+	//participants[who].tweens.blink()
 	let direction = new THREE.Vector3();
 	let focalPoint;
 	if (toWhom === 0) {
@@ -28,6 +29,7 @@ export default function avatarLookAt(who, toWhom, duration) {
 	} else {
 		focalPoint = participants[toWhom].movableBodyParts.head.getWorldPosition(direction)
 	}
+
 	head.onUpdate(function (object) {
 		participants[who].movableBodyParts.leftEye.lookAt(focalPoint)
 		participants[who].movableBodyParts.rightEye.lookAt(focalPoint)
