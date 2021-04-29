@@ -137,7 +137,6 @@ function addMovableBodyParts(i) {
 			participants[i].movableBodyParts.rightEye = object;
 		} else if  (object.name === "Wolf3D_Head") {
 			participants[i].movableBodyParts.face = object;
-			participants[i].blankFaceMorphTargets = Object.assign({}, object.morphTargetInfluences);
 		} else if  (object.name === "Spine") {
 			participants[i].movableBodyParts.spine = object;
 		} else if  (object.name === "Wolf3D_Teeth") {

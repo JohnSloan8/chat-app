@@ -2,13 +2,14 @@ import { participants } from "../../models/components/avatar.js"
 import { posRot } from "../../scene/components/pos-rot.js"
 import { noP, camera } from "../../scene/components/camera.js";
 import easingDict from "../easings.js"
+import {expressionMorphs} from "./prepare.js"
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
 const jawNeeded = {
 	"smile": false,
 	"bigSmile": true,
-	"surprise": true,
+	//"surprise": true,
 }
 
 window.expression = expression
@@ -33,12 +34,12 @@ export default function expression(who, e) {
 
 	if ( jawNeeded[e] ) {
 		expressionIn.onStart( function() {
-			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": 1}, 500)
+			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": expressionMorphs[e].jawOpen}, 500)
 			.easing(easingDict["cubicOut"])
 			.start()
 		})
 		expressionOut.onStart( function() {
-			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": 0}, 1500)
+			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": expressionMorphs[e].jawOpen/3}, 1500)
 			.easing(easingDict["cubicOut"])
 			.start()
 		})
