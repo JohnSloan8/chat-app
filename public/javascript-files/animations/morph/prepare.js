@@ -70,9 +70,7 @@ const expressionMorphs = {
 export default function prepareExpressions() {
 
 	for(let i=1; i<noP; i++) {
-		console.log('i:', i)
 		Object.entries(expressionMorphs).forEach( function(e) {
-			console.log('e[1]:', e[1])
 			let lengthArray = participants[i].movableBodyParts.face.morphTargetInfluences.length
 			participants[i].movableBodyParts.face.morphTargetDictionary[e[0]] = lengthArray
 			Object.entries(e[1]).forEach( function(m, ind) {

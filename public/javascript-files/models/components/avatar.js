@@ -63,9 +63,15 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		group.add(participants[i].model);
 		participants[i].model.traverse(function(object) {
 			if (object.isMesh) {
-				object.castShadow = true;
+				object.castShadow = false;
 				object.frustumCulled = false;
 				//console.log('object:', object);
+				//object.material.color = {
+					//r: 1,
+					//g: 1,
+					//b: 1,
+					//isColor: true
+				//}
 			}
 		});
 		addMovableBodyParts(i)
