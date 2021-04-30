@@ -9,7 +9,14 @@ import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tw
 const jawNeeded = {
 	"smile": false,
 	"bigSmile": true,
-	//"surprise": true,
+	"surprise": true,
+}
+
+window.allExpression = allExpression
+function allExpression(e) {
+	for (let i=1; i<noP; i++) {
+		expression(i, e)
+	}
 }
 
 window.expression = expression
@@ -19,7 +26,7 @@ export default function expression(who, e) {
 	let faceMorphsHalf = Object.assign({}, participants[who].blankFaceMorphTargets);
 	let faceMorphsTo = Object.assign({}, participants[who].blankFaceMorphTargets);
 	faceMorphsTo[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1
-	faceMorphsHalf[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1/3
+	faceMorphsHalf[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1/2
 	console.log('faceMorphsTo:', faceMorphsTo)
 
 	let expressionIn = new TWEEN.Tween(participants[who].movableBodyParts.face.morphTargetInfluences).to(faceMorphsTo, 500)

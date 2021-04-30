@@ -17,16 +17,17 @@ const baseActions = {
 };
 const additiveActions = {
 	neutral_arm_pose: { weight: 1 },
-	left_up_pose: { weight: 0 },
-	left_down_pose: { weight: 0 },
-	right_up_pose: { weight: 0 },
-	right_down_pose: { weight: 0 },
+	right_hand_up_pose: { weight: 0 },
+	thinking_pose: { weight: 0 },
+	face_palm_pose: { weight: 0 },
+	x_pose: { weight: 0 },
+	dunno_pose: { weight: 0 },
 };
 
 let avatarCount = 1
 export default function setupAvatar() {
 
-	loadIndividualGLTF('avatar-man-1-edited-a-frame', avatarCount, iterateAvatar)
+	loadIndividualGLTF('root-avatar-poses', avatarCount, iterateAvatar)
 
 	scene.add( group )
 }
