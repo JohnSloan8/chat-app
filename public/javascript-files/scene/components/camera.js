@@ -21,6 +21,7 @@ export default function setupCamera() {
 		0.01,
 		100
 	);
+	window.camera = camera
 	camera.position.set(0, posRot[noP].camera.y, posRot[noP].camera.z);
 	controls = new OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, posRot[noP].camera.yFocus, 0);

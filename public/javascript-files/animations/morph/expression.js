@@ -10,6 +10,7 @@ const jawNeeded = {
 	"smile": false,
 	"bigSmile": true,
 	"surprise": true,
+	"sad": false,
 }
 
 window.allExpression = allExpression

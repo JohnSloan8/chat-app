@@ -10,6 +10,7 @@ import prepareExpressions from '../../animations/morph/prepare.js'
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
+var me = {};
 window.participants = participants
 var avatars = ['avatar-man-2', 'avatar-man-3', 'avatar-woman-1', 'avatar-woman-2', 'avatar-woman-3', ]
 const baseActions = {
@@ -28,7 +29,6 @@ let avatarCount = 1
 export default function setupAvatar() {
 
 	loadIndividualGLTF('root-avatar-poses', avatarCount, iterateAvatar)
-
 	scene.add( group )
 }
 
@@ -153,10 +153,10 @@ function addMovableBodyParts(i) {
 }
 
 function calculateLookAngles() {
-	let headMult = 0.15;
-	let spine2Mult = 0.1;
-	let spine1Mult = 0.1;
-	let yMult = 2; //more rotation in y axis - avatars not leaning over each other!
+	let headMult = 0.1;
+	let spine2Mult = 0.0667;
+	let spine1Mult = 0.0667;
+	let yMult = 3; //more rotation in y axis - avatars not leaning over each other!
 	for (let j=1; j<noP; j++) {
 		participants[j].rotations =  {}
 		for (let k=0; k<noP; k++) {
@@ -182,7 +182,21 @@ function calculateLookAngles() {
 			}
 		}
 	}
-	//testBufferGeom()
+
+	me = {
+		rotations: {}
+	}
+	for (let k=1; k<noP; k++) {
+		let direction = new THREE.Vector3();
+		let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
+		camera.lookAt(headPos)
+		me.rotations[k] = {
+			y: camera.rotation.y * 0.2
+		}
+	}
+	camera.lookAt(0, 1.69, 0)
+	window.me = me
+
 	prepareExpressions()
 	animate()
 	initAnimations();
