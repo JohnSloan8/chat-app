@@ -65,13 +65,6 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 			if (object.isMesh) {
 				object.castShadow = false;
 				object.frustumCulled = false;
-				//console.log('object:', object);
-				//object.material.color = {
-					//r: 1,
-					//g: 1,
-					//b: 1,
-					//isColor: true
-				//}
 			}
 		});
 		addMovableBodyParts(i)
@@ -191,7 +184,7 @@ function calculateLookAngles() {
 		let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
 		camera.lookAt(headPos)
 		me.rotations[k] = {
-			y: camera.rotation.y * 0.2
+			y: camera.rotation.y * 0.15
 		}
 	}
 	camera.lookAt(0, 1.69, 0)

@@ -13,18 +13,24 @@ export default function avatarLookAt(who, toWhom, duration) {
 				if (object.isMesh) {
 					if (i !== toWhom) {
 						object.material.color = {
-							r: 0.8,
-							g: 0.8,
-							b: 0.8,
+							r: 1,
+							g: 1,
+							b: 1,
 							isColor: true
 						}
 					} else {
 						object.material.color = {
-							r: 1.1,
-							g: 1.1,
-							b: 1.1,
+							r: 1.5,
+							g: 1.5,
+							b: 1.5,
 							isColor: true
 						}
+						new TWEEN.Tween(object.material.color).to({
+							r: 1,
+							g: 1,
+							b: 1,
+							isColor: true
+						}, 1000).start()
 					}
 				}
 			});
@@ -40,17 +46,15 @@ export default function avatarLookAt(who, toWhom, duration) {
 		focalPoint = participants[toWhom].movableBodyParts.head.getWorldPosition(direction)
 	}
 
-	//if (toWhom === who) {
-		//toWhom = 2;
-	//}
-
 	if (toWhom !== who) {
 		if ( who === 0 ) {
-			let cameraTween = new TWEEN.Tween(camera.rotation).to(me.rotations[toWhom], duration)
+			let cameraTweenRotation = new TWEEN.Tween(camera.rotation).to(me.rotations[toWhom], duration)
 				.easing(TWEEN.Easing.Quintic.Out)
-			cameraTween.start()
+			let cameraTweenPosition = new TWEEN.Tween(camera.position).to({x: -0.2*participants[toWhom].rotations[0].head.y}, duration)
+				.easing(TWEEN.Easing.Quintic.Out)
+			cameraTweenRotation.start()
+			cameraTweenPosition.start()
 		} else {
-			console.log('in avatarLookAt')
 			let head = new TWEEN.Tween(participants[who].movableBodyParts.head.rotation).to(participants[who].rotations[toWhom].head, 0.8*duration)
 			let spine2 = new TWEEN.Tween(participants[who].movableBodyParts.spine2.rotation).to(participants[who].rotations[toWhom].spine2, 0.9*duration)
 			let spine1 = new TWEEN.Tween(participants[who].movableBodyParts.spine1.rotation).to(participants[who].rotations[toWhom].spine1, duration)
