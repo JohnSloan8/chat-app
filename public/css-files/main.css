@@ -1,6 +1,0 @@
-.greyscaleBox {
-	position: absolute;
-	height: 100%;
-	width: 40%;
-	backdrop-filter: grayscale(0.5) blur(15px);
-}
