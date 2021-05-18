@@ -1,5 +1,6 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import { scene } from "./scene.js"
+import { showShadows } from "../settings.js"
 
 let hemiLight, dirLight, dirLightHelper
 
@@ -10,16 +11,19 @@ export default function setupLights() {
 	scene.add(hemiLight);
 
 	dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-	dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 2);
 	dirLight.position.set(3, 10, 10);
-	dirLight.castShadow = true;
-	dirLight.shadow.camera.top = 2;
-	dirLight.shadow.camera.bottom = -2;
-	dirLight.shadow.camera.left = -2;
-	dirLight.shadow.camera.right = 2;
-	dirLight.shadow.camera.near = 0.1;
-	dirLight.shadow.camera.far = 40;
+	dirLight.castShadow = showShadows;
+	if ( showShadows ) {
+		dirLight.shadow.camera.top = 2;
+		dirLight.shadow.camera.bottom = -2;
+		dirLight.shadow.camera.left = -2;
+		dirLight.shadow.camera.right = 2;
+		dirLight.shadow.camera.near = 0.1;
+		dirLight.shadow.camera.far = 40;
+	}
 	scene.add(dirLight);
+
+	dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 2);
 	scene.add(dirLightHelper);
 
 }

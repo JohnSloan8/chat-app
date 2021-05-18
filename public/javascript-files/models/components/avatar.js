@@ -1,11 +1,12 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/loaders/GLTFLoader.js";
+import { group } from "../../scene/load-scene.js";
 import { scene } from "../../scene/components/scene.js";
-import { group } from "../../scene/components/camera.js";
+import { camera } from "../../scene/components/camera.js";
 import { noParticipants } from "../../scene/settings.js"
+import { avatars, baseActions, additiveActions } from "../settings.js"
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
-import includeColumn from "../../scene/components/column.js"
 import initAnimations from '../../animations/init.js'
 import prepareExpressions from '../../animations/morph/prepare.js'
 
@@ -13,18 +14,6 @@ let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
 var me = {};
 window.participants = participants
-var avatars = ['avatar-man-2', 'avatar-man-3', 'avatar-woman-1', 'avatar-woman-2', 'avatar-woman-3', ]
-const baseActions = {
-	//idle: { weight: 1 },
-};
-const additiveActions = {
-	neutral_arm_pose: { weight: 1 },
-	right_hand_up_pose: { weight: 0 },
-	thinking_pose: { weight: 0 },
-	face_palm_pose: { weight: 0 },
-	x_pose: { weight: 0 },
-	dunno_pose: { weight: 0 },
-};
 
 let avatarCount = 1
 export default function setupAvatar() {
@@ -33,7 +22,6 @@ export default function setupAvatar() {
 }
 
 function iterateAvatar() {
-
 	avatarCount += 1;
 	if (avatarCount < noParticipants) {
 		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
@@ -41,7 +29,6 @@ function iterateAvatar() {
 	} else {
 		calculateLookAngles();
 	};
-
 }
 
 function loadIndividualGLTF(avatarName, i, cb=null) {

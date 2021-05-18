@@ -7,9 +7,9 @@ let	scene, renderer, clock, container, stats
 
 export default function setupScene() {
 
+	container = document.getElementById("threeCanvas");
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setClearColor( 0xffffff, 0 )
-	container = document.getElementById("threeCanvas");
 	clock = new THREE.Clock();
 	scene = new THREE.Scene();
 	stats = new Stats();
