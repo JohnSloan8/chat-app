@@ -1,9 +1,9 @@
 const noParticipants = 6
 const showTable = false
-const showAxesHelper = false
+const showAxesHelper = true
 const showColumn = false
 const showSkeleton = false
-const orbitControls = true
+const orbitControls = false
 
 const background = {
 	displayGround: true,
@@ -15,7 +15,7 @@ const showShadows = false
 
 const cameraSettings = {
 	cameraYPos: 1.69,
-	cameraFocY: 1.59,
+	neutralFocus: (0, 1.59, 0),
 	2: {
 		radius: 0.5,
 		cameraZPos: 0.2,

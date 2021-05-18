@@ -3,7 +3,7 @@ import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/js
 import { group } from "../../scene/load-scene.js";
 import { scene } from "../../scene/components/scene.js";
 import { camera } from "../../scene/components/camera.js";
-import { noParticipants } from "../../scene/settings.js"
+import { noParticipants, cameraSettings } from "../../scene/settings.js"
 import { avatars, baseActions, additiveActions } from "../settings.js"
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
@@ -12,10 +12,10 @@ import prepareExpressions from '../../animations/morph/prepare.js'
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
-var me = {};
 window.participants = participants
+var me = {};
 
-let avatarCount = 1
+let avatarCount = 0
 export default function setupAvatar() {
 	loadIndividualGLTF('root-avatar-poses', avatarCount, iterateAvatar)
 	scene.add( group )
@@ -44,9 +44,9 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		participants[i].model = gltf.scene;
 		participants[i].model.rotation.set(0, posRot[noParticipants][i].neutralYrotation, 0);
 		participants[i].model.position.set(posRot[noParticipants][i].x, 0, posRot[noParticipants][i].z);
-		if(i===2) {
-			participants[i].model.scale.set(1, 0.9, 1);
-		}
+		//if(i===2) {
+			//participants[i].model.scale.set(1, 0.9, 1);
+		//}
 		group.add(participants[i].model);
 		participants[i].model.traverse(function(object) {
 			if (object.isMesh) {
@@ -58,7 +58,7 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		//skeleton = new THREE.SkeletonHelper(participants[i].model);
 		//skeleton.visible = true;
 		//scene.add(skeleton);
-		if (avatarCount === 1) {
+		if (avatarCount === 0) {
 			animations = gltf.animations;
 		}
 		participants[i].mixer = new THREE.AnimationMixer(participants[i].model);
@@ -174,7 +174,7 @@ function calculateLookAngles() {
 			y: camera.rotation.y * 0.15
 		}
 	}
-	camera.lookAt(0, 1.69, 0)
+	camera.lookAt(0, 1.69, 0);
 	window.me = me
 
 	prepareExpressions()

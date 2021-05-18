@@ -1,19 +1,31 @@
 import { cameraSettings } from "../settings.js"
 
 var posRot = {}
-
+window.posRot = posRot
 export default function calculatePosRot(noP) {
+	let curAng = 0;
 	posRot[noP] = {
 		camera: {
 			x: 0,
 			y: cameraSettings.cameraYPos,
 			z: cameraSettings[noP].cameraZPos+cameraSettings[noP].radius,
-			yFocus: cameraSettings.cameraFocY,
 			fov: cameraSettings[noP].cameraFov,
+		},
+		cameraStart: {
+			position: {
+				x: 0,
+				y: cameraSettings.cameraYPos*1.5,
+				z: cameraSettings[noP].radius*4,
+			},
+			fov: cameraSettings[noP].cameraFov,
+		},
+		0: {
+			x: 0,
+			z: cameraSettings[noP].radius,
+			neutralYrotation: -Math.PI
 		}
 	};
 
-	let curAng = 0;
 	if (noP%2 === 0) {
 		curAng = (noP - 2)/2 * cameraSettings[noP].angle
 	} else {

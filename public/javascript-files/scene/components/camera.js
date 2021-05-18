@@ -13,11 +13,14 @@ export default function setupCamera() {
 		0.01,
 		100
 	);
-	camera.position.set(0, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z);
+	window.camera = camera
+	
+	//camera.position.set(0, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z);
+	camera.position.set(posRot[noParticipants].cameraStart.position.x, posRot[noParticipants].cameraStart.position.y, posRot[noParticipants].cameraStart.position.z);
 
 	if ( orbitControls ) {
 		controls = new OrbitControls(camera, renderer.domElement);
-		controls.target.set(0, posRot[noParticipants].camera.yFocus, 0);
+		controls.target.set(cameraSettings.neutralFocus);
 		controls.update();
 	}
 }

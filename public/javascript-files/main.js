@@ -11,6 +11,7 @@ import avatarShake from "./animations/shake.js"
 import blink from "./animations/morph/blink.js"
 import expression from "./animations/morph/expression.js"
 import gesture from "./animations/move/gesture.js"
+import cameraEnter from "./scene/animations/cameraEnter.js"
 import createKeyBindings from "./animations/input/cameraKeyboard.js"
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
