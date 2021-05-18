@@ -24,20 +24,14 @@ function init() {
 
 
 function animate() {
-	try {
 		const mixerUpdateDelta = clock.getDelta();
 		Object.values(participants).forEach( function(p) {
 			p.mixer.update(mixerUpdateDelta);
 		})
 		stats.update();
-
 		TWEEN.update()
-
 		renderer.render(scene, camera);
 		requestAnimationFrame(animate);
-	} catch(err) {
-		console.log('error:', err)
-	}
 }
 
 export { animate }

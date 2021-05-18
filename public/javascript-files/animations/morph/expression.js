@@ -1,6 +1,7 @@
 import { participants } from "../../models/components/avatar.js"
 import { posRot } from "../../scene/components/pos-rot.js"
-import { noP, camera } from "../../scene/components/camera.js";
+import { camera } from "../../scene/components/camera.js";
+import { noParticipants } from "../../settings/load-settings.js"
 import easingDict from "../easings.js"
 import {expressionMorphs} from "./prepare.js"
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
@@ -15,7 +16,7 @@ const jawNeeded = {
 
 window.allExpression = allExpression
 function allExpression(e) {
-	for (let i=1; i<noP; i++) {
+	for (let i=1; i<noParticipants; i++) {
 		expression(i, e)
 	}
 }

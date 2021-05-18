@@ -1,7 +1,8 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/loaders/GLTFLoader.js";
 import { scene } from "../../scene/components/scene.js";
-import { noP, group } from "../../scene/components/camera.js";
+import { group } from "../../scene/components/camera.js";
+import { noParticipants } from "../../settings/load-settings.js"
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
 import includeColumn from "../../scene/components/column.js"
@@ -35,7 +36,7 @@ export default function setupAvatar() {
 function iterateAvatar() {
 
 	avatarCount += 1;
-	if (avatarCount < noP) {
+	if (avatarCount < noParticipants) {
 		let randAvatar = avatars.splice(Math.floor(Math.random()*avatars.length), 1)
 		loadIndividualGLTF(randAvatar, avatarCount, iterateAvatar)
 	} else {
@@ -55,8 +56,8 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 			currentlyLookingAt: 0
 		}
 		participants[i].model = gltf.scene;
-		participants[i].model.rotation.set(0, posRot[noP][i].neutralYrotation, 0);
-		participants[i].model.position.set(posRot[noP][i].x, 0, posRot[noP][i].z);
+		participants[i].model.rotation.set(0, posRot[noParticipants][i].neutralYrotation, 0);
+		participants[i].model.position.set(posRot[noParticipants][i].x, 0, posRot[noParticipants][i].z);
 		if(i===2) {
 			participants[i].model.scale.set(1, 0.9, 1);
 		}
@@ -150,9 +151,9 @@ function calculateLookAngles() {
 	let spine2Mult = 0.0667;
 	let spine1Mult = 0.0667;
 	let yMult = 3; //more rotation in y axis - avatars not leaning over each other!
-	for (let j=1; j<noP; j++) {
+	for (let j=1; j<noParticipants; j++) {
 		participants[j].rotations =  {}
-		for (let k=0; k<noP; k++) {
+		for (let k=0; k<noParticipants; k++) {
 			if (j===k) {
 				participants[j].rotations[k] = {
 					head: {x: 0, y: 0, z: 0},
@@ -162,7 +163,7 @@ function calculateLookAngles() {
 			} else {
 				participants[j].rotations[k] = {}
 				if (k===0) {
-					participants[j].movableBodyParts.head.lookAt(posRot[noP].camera.x, posRot[noP].camera.y, posRot[noP].camera.z)
+					participants[j].movableBodyParts.head.lookAt(posRot[noParticipants].camera.x, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z)
 				} else {
 					let direction = new THREE.Vector3();
 					let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
@@ -179,7 +180,7 @@ function calculateLookAngles() {
 	me = {
 		rotations: {}
 	}
-	for (let k=1; k<noP; k++) {
+	for (let k=1; k<noParticipants; k++) {
 		let direction = new THREE.Vector3();
 		let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
 		camera.lookAt(headPos)

@@ -1,5 +1,5 @@
 import avatarLookAt from './look.js'
-import {noP} from "../scene/components/camera.js";
+import { noParticipants } from "../settings/load-settings.js"
 import expression from "./morph/expression.js";
 import avatarNodShake from "./shake.js";
 import gesture from "./move/gesture.js";
@@ -7,7 +7,7 @@ import {expressionMorphs} from "./morph/prepare.js";
 
 window.allLookAt = allLookAt
 function allLookAt(who, jittered=true) {
-	for (let i=1; i<noP; i++) {
+	for (let i=1; i<noParticipants; i++) {
 		let wait = 0;
 		if ( jittered ) {
 			wait = Math.random()*500;
@@ -18,7 +18,7 @@ function allLookAt(who, jittered=true) {
 
 window.allMakeRandomExpression = allMakeRandomExpression
 function allMakeRandomExpression(jittered=true) {
-	for (let i=1; i<noP; i++) {
+	for (let i=1; i<noParticipants; i++) {
 		let eM = Object.keys(expressionMorphs)
 		console.log('eM:', eM)
 		let randomExpression = eM[Math.floor(Math.random()*eM.length)];
@@ -28,7 +28,7 @@ function allMakeRandomExpression(jittered=true) {
 
 window.allRandomlyNodShake = allRandomlyNodShake
 function allRandomlyNodShake(jittered=true) {
-	for (let i=1; i<noP; i++) {
+	for (let i=1; i<noParticipants; i++) {
 		let randomNodShake = ["allRandomlyNodShake", "shake"][Math.floor(Math.random()*2)];
 		setTimeout(function(){avatarNodShake(i, randomNodShake)}, Math.random()*1000)
 	}
@@ -36,7 +36,7 @@ function allRandomlyNodShake(jittered=true) {
 
 window.allMakeRandomGesture = allMakeRandomGesture
 function allMakeRandomGesture(jittered=true) {
-	for (let i=1; i<noP; i++) {
+	for (let i=1; i<noParticipants; i++) {
 		let randomGesture = participants[i].allActions[Math.floor(Math.random()*participants[i].allActions.length)]._clip.name;
 		if (randomGesture !== "neutral_arm_pose") {
 			setTimeout(function(){gesture(i, randomGesture, 1000)}, Math.random()*500)

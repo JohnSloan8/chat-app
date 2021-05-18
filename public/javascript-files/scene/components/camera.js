@@ -5,26 +5,26 @@ import calculatePosRot from "./pos-rot.js"
 import includeTable from "./table.js"
 import includeColumn from "./column.js"
 import { posRot } from "./pos-rot.js"
-let camera, group, controls, noP, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
+import { noParticipants } from "../../settings/load-settings.js"
+let camera, group, controls, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
 
 export default function setupCamera() {
-	noP = 6
-	calculatePosRot(noP)
-	let table = includeTable(setupSettings[noP].radius, 32, 0)
+	calculatePosRot(noParticipants)
+	let table = includeTable(setupSettings[noParticipants].radius, 32, 0)
 	//let column = includeColumn(0.01, 10, 0.01, 0xaaaa11)
 	group = new THREE.Group();
 	group.add( table );
 	//group.add( column );
 	camera = new THREE.PerspectiveCamera(
-		posRot[noP].camera.fov,
+		posRot[noParticipants].camera.fov,
 		window.innerWidth / window.innerHeight,
 		0.01,
 		100
 	);
 	window.camera = camera
-	camera.position.set(0, posRot[noP].camera.y, posRot[noP].camera.z);
+	camera.position.set(0, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z);
 	controls = new OrbitControls(camera, renderer.domElement);
-	controls.target.set(0, posRot[noP].camera.yFocus, 0);
+	controls.target.set(0, posRot[noParticipants].camera.yFocus, 0);
 	controls.update();
 }
 
@@ -87,4 +87,4 @@ const setupSettings = {
 	}
 }
 window.setupSettings = setupSettings
-export { camera, noP, group, setupSettings }
+export { camera, group, setupSettings }
