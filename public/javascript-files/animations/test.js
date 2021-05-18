@@ -1,5 +1,5 @@
 import avatarLookAt from './look.js'
-import { noParticipants } from "../settings/load-settings.js"
+import { noParticipants } from "../scene/settings.js"
 import expression from "./morph/expression.js";
 import avatarNodShake from "./shake.js";
 import gesture from "./move/gesture.js";

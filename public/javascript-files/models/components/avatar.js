@@ -2,7 +2,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.mod
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/loaders/GLTFLoader.js";
 import { scene } from "../../scene/components/scene.js";
 import { group } from "../../scene/components/camera.js";
-import { noParticipants } from "../../settings/load-settings.js"
+import { noParticipants } from "../../scene/settings.js"
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
 import includeColumn from "../../scene/components/column.js"
@@ -28,7 +28,6 @@ const additiveActions = {
 
 let avatarCount = 1
 export default function setupAvatar() {
-
 	loadIndividualGLTF('root-avatar-poses', avatarCount, iterateAvatar)
 	scene.add( group )
 }

@@ -1,7 +1,7 @@
 import { participants } from "../../models/components/avatar.js"
 import { posRot } from "../../scene/components/pos-rot.js"
 import { camera } from "../../scene/components/camera.js";
-import { noParticipants } from "../../settings/load-settings.js"
+import { noParticipants } from "../../scene/settings.js"
 import easingDict from "../easings.js"
 import {expressionMorphs} from "./prepare.js"
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";

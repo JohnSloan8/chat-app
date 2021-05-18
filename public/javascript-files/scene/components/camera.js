@@ -5,7 +5,7 @@ import calculatePosRot from "./pos-rot.js"
 import includeTable from "./table.js"
 import includeColumn from "./column.js"
 import { posRot } from "./pos-rot.js"
-import { noParticipants } from "../../settings/load-settings.js"
+import { noParticipants } from "../settings.js"
 let camera, group, controls, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
 
 export default function setupCamera() {
