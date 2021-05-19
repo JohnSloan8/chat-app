@@ -137,7 +137,7 @@ function calculateLookAngles() {
 	let spine2Mult = 0.0667;
 	let spine1Mult = 0.0667;
 	let yMult = 3; //more rotation in y axis - avatars not leaning over each other!
-	for (let j=1; j<noParticipants; j++) {
+	for (let j=0; j<noParticipants; j++) {
 		participants[j].rotations =  {}
 		for (let k=0; k<noParticipants; k++) {
 			if (j===k) {
@@ -145,6 +145,11 @@ function calculateLookAngles() {
 					head: {x: 0, y: 0, z: 0},
 					spine2: {x: 0, y: 0, z: 0},
 					spine1: {x: 0, y: 0, z: 0}
+				}
+				if (j===0) {
+					let direction = new THREE.Vector3();
+					let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
+					posRot[noParticipants].camera.y = headPos.y + 0.2
 				}
 			} else {
 				participants[j].rotations[k] = {}

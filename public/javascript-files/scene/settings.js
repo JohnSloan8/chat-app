@@ -3,8 +3,9 @@ const showTable = false
 const showAxesHelper = true
 const showColumn = false
 const showSkeleton = false
-const orbitControls = false
-
+const showEntranceAnimation = false
+const orbitControls = true
+	
 const background = {
 	displayGround: true,
 	displayFog: true,
@@ -14,7 +15,6 @@ const background = {
 const showShadows = false
 
 const cameraSettings = {
-	cameraYPos: 1.69,
 	neutralFocus: (0, 1.59, 0),
 	2: {
 		radius: 0.5,
@@ -78,6 +78,7 @@ export {
 	showAxesHelper,
 	showColumn,
 	showSkeleton,
+	showEntranceAnimation,
 	orbitControls,
 	background,
 	showShadows,

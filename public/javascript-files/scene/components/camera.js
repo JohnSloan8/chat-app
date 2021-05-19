@@ -1,10 +1,10 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/controls/OrbitControls.js";
-import { renderer } from "./scene.js"
+import { renderer, scene } from "./scene.js"
 import { posRot } from "./pos-rot.js"
-import { noParticipants, cameraSettings, orbitControls } from "../settings.js"
+import { noParticipants, cameraSettings, orbitControls, showEntranceAnimation } from "../settings.js"
 
-let camera, controls, radius, angle, cameraYPos, cameraZPos, cameraFov, cameraFocY;
+let camera, centralPivotGroup
 
 export default function setupCamera() {
 	camera = new THREE.PerspectiveCamera(
@@ -13,16 +13,11 @@ export default function setupCamera() {
 		0.01,
 		100
 	);
+	centralPivotGroup = new THREE.Group()
+	centralPivotGroup.add(camera)
+	scene.add(centralPivotGroup)
 	window.camera = camera
-	
-	//camera.position.set(0, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z);
-	camera.position.set(posRot[noParticipants].cameraStart.position.x, posRot[noParticipants].cameraStart.position.y, posRot[noParticipants].cameraStart.position.z);
 
-	if ( orbitControls ) {
-		controls = new OrbitControls(camera, renderer.domElement);
-		controls.target.set(cameraSettings.neutralFocus);
-		controls.update();
-	}
 }
 
-export { camera }
+export { camera, centralPivotGroup }

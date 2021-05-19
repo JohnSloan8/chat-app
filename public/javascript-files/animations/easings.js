@@ -3,6 +3,7 @@ const easingDict = {
 	'linear': TWEEN.Easing.Linear.None,
 	'quadraticIn': TWEEN.Easing.Quadratic.In,
 	'quadraticOut': TWEEN.Easing.Quadratic.Out,
+	'cubicInOut': TWEEN.Easing.Cubic.InOut,
 	'cubicIn': TWEEN.Easing.Cubic.In,
 	'cubicOut': TWEEN.Easing.Cubic.Out,
 	'quinticIn': TWEEN.Easing.Quintic.In,
