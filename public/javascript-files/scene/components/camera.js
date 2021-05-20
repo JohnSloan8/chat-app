@@ -2,7 +2,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.mod
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/controls/OrbitControls.js";
 import { renderer, scene } from "./scene.js"
 import { posRot } from "./pos-rot.js"
-import { noParticipants, cameraSettings, orbitControls, showEntranceAnimation } from "../settings.js"
+import { noParticipants } from "../settings.js"
 
 let camera, centralPivotGroup
 

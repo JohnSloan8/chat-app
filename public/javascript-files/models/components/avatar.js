@@ -3,7 +3,7 @@ import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/js
 import { group } from "../../scene/load-scene.js";
 import { scene } from "../../scene/components/scene.js";
 import { camera } from "../../scene/components/camera.js";
-import { noParticipants, cameraSettings } from "../../scene/settings.js"
+import { noParticipants, cameraSettings, showSkeleton } from "../../scene/settings.js"
 import { avatars, baseActions, additiveActions } from "../settings.js"
 import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
@@ -55,9 +55,12 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 			}
 		});
 		addMovableBodyParts(i)
-		//skeleton = new THREE.SkeletonHelper(participants[i].model);
-		//skeleton.visible = true;
-		//scene.add(skeleton);
+
+		if ( showSkeleton ) {
+			skeleton = new THREE.SkeletonHelper(participants[i].model);
+			skeleton.visible = true;
+			scene.add(skeleton);
+		}
 		if (avatarCount === 0) {
 			animations = gltf.animations;
 		}
@@ -136,10 +139,12 @@ function calculateLookAngles() {
 	let headMult = 0.1;
 	let spine2Mult = 0.0667;
 	let spine1Mult = 0.0667;
-	let yMult = 3; //more rotation in y axis - avatars not leaning over each other!
+	let xMult = 1
+	let yMult = 1; //more rotation in y axis - avatars not leaning over each other!
+	let zMult = 1;
 	for (let j=0; j<noParticipants; j++) {
 		participants[j].rotations =  {}
-		for (let k=0; k<noParticipants; k++) {
+		for (let k=-1; k<noParticipants; k++) {
 			if (j===k) {
 				participants[j].rotations[k] = {
 					head: {x: 0, y: 0, z: 0},
@@ -153,16 +158,27 @@ function calculateLookAngles() {
 				}
 			} else {
 				participants[j].rotations[k] = {}
-				if (k===0) {
+				if (k===-1) {
+					xMult = 2
+					yMult = 1;
+					zMult = 2;
+					participants[j].movableBodyParts.head.lookAt(0, 1, 0)
+				} else if (k===0) {
+					xMult = 1
+					yMult = 3;
+					zMult = 1;
 					participants[j].movableBodyParts.head.lookAt(posRot[noParticipants].camera.x, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z)
 				} else {
+					xMult = 1
+					yMult = 3;
+					zMult = 1;
 					let direction = new THREE.Vector3();
 					let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
 					participants[j].movableBodyParts.head.lookAt(headPos)
 				}
-				participants[j].rotations[k].head = {x:participants[j].movableBodyParts.head.rotation.x*headMult, y:participants[j].movableBodyParts.head.rotation.y*headMult*yMult, z:participants[j].movableBodyParts.head.rotation.z*headMult}
-				participants[j].rotations[k].spine2 = {x:participants[j].movableBodyParts.head.rotation.x*spine2Mult, y:participants[j].movableBodyParts.head.rotation.y*spine2Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine2Mult}
-				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult}
+				participants[j].rotations[k].head = {x:participants[j].movableBodyParts.head.rotation.x*headMult*xMult, y:participants[j].movableBodyParts.head.rotation.y*headMult*yMult, z:participants[j].movableBodyParts.head.rotation.z*headMult*zMult}
+				participants[j].rotations[k].spine2 = {x:participants[j].movableBodyParts.head.rotation.x*spine2Mult*xMult, y:participants[j].movableBodyParts.head.rotation.y*spine2Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine2Mult*zMult}
+				participants[j].rotations[k].spine1 = {x:participants[j].movableBodyParts.head.rotation.x*spine1Mult*xMult, y:participants[j].movableBodyParts.head.rotation.y*spine1Mult*yMult, z:participants[j].movableBodyParts.head.rotation.z*spine1Mult*zMult}
 				participants[j].states.currentlyLookingAt = k
 			}
 		}

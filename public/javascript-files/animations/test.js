@@ -7,7 +7,7 @@ import {expressionMorphs} from "./morph/prepare.js";
 
 window.allLookAt = allLookAt
 function allLookAt(who, jittered=true) {
-	for (let i=1; i<noParticipants; i++) {
+	for (let i=0; i<noParticipants; i++) {
 		let wait = 0;
 		if ( jittered ) {
 			wait = Math.random()*500;
