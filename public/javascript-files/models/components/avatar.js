@@ -184,19 +184,14 @@ function calculateLookAngles() {
 		}
 	}
 
-	me = {
-		rotations: {}
-	}
 	for (let k=1; k<noParticipants; k++) {
 		let direction = new THREE.Vector3();
 		let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
 		camera.lookAt(headPos)
-		me.rotations[k] = {
+		posRot[noParticipants].camera.rotations[k] = {
 			y: camera.rotation.y * 0.15
 		}
 	}
-	camera.lookAt(0, 1.69, 0);
-	window.me = me
 
 	prepareExpressions()
 	animate()

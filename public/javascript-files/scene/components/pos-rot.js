@@ -9,6 +9,7 @@ export default function calculatePosRot(noP) {
 			x: 0,
 			z: cameraSettings[noP].cameraZPos+cameraSettings[noP].radius,
 			fov: cameraSettings[noP].cameraFov,
+			rotations: {},
 		},
 		cameraStart: {
 			position: {

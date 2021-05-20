@@ -34,7 +34,6 @@ export default function avatarLookAt(who, toWhom, duration) {
 	} else {
 		focalPoint = new THREE.Vector3(0, 1.59, 0)
 	}
-	console.log('focalPoint:', focalPoint)
 
 	head.onUpdate(function (object) {
 		if (toWhom === -1) {

@@ -1,8 +1,12 @@
+import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 import { noParticipants } from "../../scene/settings.js"
 import { participants } from "../../models/components/avatar.js"
 import avatarLookAt from "../look.js"
+import { posRot } from "../../scene/components/pos-rot.js"
 
-export default function cameraLookAt(whom) {
+window.cameraLookAt = cameraLookAt
+function cameraLookAt(toWhom, duration) {
+	avatarLookAt(0, toWhom, duration)
   for (let i=1; i<noParticipants; i++) {
     participants[i].model.traverse(function(object) {
       if (object.isMesh) {
@@ -30,23 +34,28 @@ export default function cameraLookAt(whom) {
       }
     });
   }
-  if ( who === 0 ) {
-    let cameraTweenRotation = new TWEEN.Tween(camera.rotation).to(me.rotations[toWhom], duration)
-      .easing(TWEEN.Easing.Quintic.Out)
-    let cameraTweenPosition = new TWEEN.Tween(camera.position).to({x: -0.2*participants[toWhom].rotations[0].head.y}, duration)
-      .easing(TWEEN.Easing.Quintic.Out)
-    cameraTweenRotation.start()
-    cameraTweenPosition.start()
-  }
+  let cameraTweenRotation = new TWEEN.Tween(camera.rotation).to(posRot[noParticipants].camera.rotations[toWhom], duration)
+    .easing(TWEEN.Easing.Quintic.Out)
+  let cameraTweenPosition = new TWEEN.Tween(camera.position).to({x: -0.2*participants[toWhom].rotations[0].head.y}, duration)
+    .easing(TWEEN.Easing.Quintic.Out)
+  cameraTweenRotation.start()
+  cameraTweenPosition.start()
 }
 
-function createKeyBindings() {
-  document.addEventListener("keypress", function(event) {
-    if ([37, 39, 65, 68].includes(event.keyCode)) {
+export default function createKeyBindings() {
+  console.trace()
+  console.log('here')
+  window.addEventListener("keypress", function(event) {
+    if (event.keyCode == 65) {
       lookControl(event.keycode)
+      alert('yo')
     }
   });
 }
 
-export { createKeyBindings }
+function lookControl(k) {
+  console.log('k:', k)
+}
+
+export { cameraLookAt }
 
