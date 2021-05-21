@@ -4,6 +4,7 @@ import { camera } from "../scene/components/camera.js";
 import { noParticipants } from "../scene/settings.js"
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
+import blink from "./morph/blink.js"
 
 window.avatarLookAt = avatarLookAt
 export default function avatarLookAt(who, toWhom, duration) {
@@ -18,15 +19,12 @@ export default function avatarLookAt(who, toWhom, duration) {
 	spine2.start();
 	spine1.start();
 	participants[who].states.currentlyLookingAt = toWhom
-	participants[who].blink.start()
+	blink(who)
 
 	let direction = new THREE.Vector3();
 	let focalPoint;
-
 	if (toWhom !== who) {
-		if (toWhom === -1) {
-			focalPoint = new THREE.Vector3(0,1.25,0)
-		} else if (toWhom === 0) {
+		if (toWhom === 0) {
 			focalPoint = camera.getWorldPosition(direction)
 		} else {
 			focalPoint = participants[toWhom].movableBodyParts.head.getWorldPosition(direction)
@@ -36,10 +34,7 @@ export default function avatarLookAt(who, toWhom, duration) {
 	}
 
 	head.onUpdate(function (object) {
-		if (toWhom === -1) {
-			participants[who].movableBodyParts.leftEye.lookAt(0, 1, 0)
-			participants[who].movableBodyParts.rightEye.lookAt(0, 1, 0)
-		} else if (toWhom === 0) {
+		if (toWhom !== who) {
 			participants[who].movableBodyParts.leftEye.lookAt(focalPoint)
 			participants[who].movableBodyParts.rightEye.lookAt(focalPoint)
 		}

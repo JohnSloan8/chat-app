@@ -1,20 +1,18 @@
 import {allLookAt} from "./test.js"
 import avatarLookAt from "./look.js"
 import cameraLookAt from "./camera/keyboard.js"
+import createKeyBindings from "./camera/keyboard.js"
 import { showEntranceAnimation, noParticipants, cameraSettings, orbitControls } from "../scene/settings.js"
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.125/examples/jsm/controls/OrbitControls.js";
 import { renderer, scene } from "../scene/components/scene.js"
 import { camera } from "../scene/components/camera.js"
-import { blink } from "./morph/blink.js"
+import beginRandomBlinking from "./random/blink.js"
+import beginRandomSwaying from "./random/sway.js"
 
 let controls 
 export default function initAnimations() {
-	//init blink
-	for (let i=0; i<noParticipants; i++) {
-		blink(i);
-		//avatarLookAt(i, i, 100)
-	}
 	allLookAt(0, false)
+	createKeyBindings()
 	if ( showEntranceAnimation ) {
 		camera.position.set(posRot[noParticipants].cameraStart.position.x, posRot[noParticipants].cameraStart.position.y, posRot[noParticipants].cameraStart.position.z);
 		cameraEnter();
@@ -30,7 +28,8 @@ export default function initAnimations() {
 		controls.update();
 		window.controls = controls
 	}
-	//cameraLookAt(1, 1000)
+	beginRandomBlinking();
+	beginRandomSwaying();
 }
 
 export { controls }

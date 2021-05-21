@@ -39,7 +39,8 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 	) {
 		participants[i] = {}
 		participants[i].states = {
-			currentlyLookingAt: 0
+			currentlyLookingAt: 0,
+			expression: 'neutral'
 		}
 		participants[i].model = gltf.scene;
 		participants[i].model.rotation.set(0, posRot[noParticipants][i].neutralYrotation, 0);
@@ -115,8 +116,11 @@ function setWeight( action, weight ) {
 function addMovableBodyParts(i) {
 	participants[i].movableBodyParts = {}
 	participants[i].model.traverse(function(object) {
+		console.log('name:', object.name)
 		if (object.name === "Head") {
 			participants[i].movableBodyParts.head = object;
+		} else if (object.name === "Neck") {
+			participants[i].movableBodyParts.neck = object;
 		} else if (object.name === "Spine1") {
 			participants[i].movableBodyParts.spine1 = object;
 		} else if (object.name === "Spine2") {

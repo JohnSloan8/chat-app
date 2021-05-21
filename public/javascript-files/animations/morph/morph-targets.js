@@ -1,6 +1,7 @@
 const expressionMorphs = {
+	"neutral": {
+	},
 	"sad": {
-		//"browInnerUp": 0.25,
 		"browOuterUpLeft": -0.25,
 		"browOuterUpRight": -0.25,
 		"eyesLookDown": 0.25,
@@ -62,9 +63,13 @@ const expressionMorphs = {
 
 const jawNeeded = {
 	"smile": false,
+	"smileHalf": false,
 	"bigSmile": true,
+	"bigSmileHalf": true,
 	"surprise": true,
+	"surpriseHalf": true,
 	"sad": false,
+	"sadHalf": false,
 }
 
 export { expressionMorphs, jawNeeded }

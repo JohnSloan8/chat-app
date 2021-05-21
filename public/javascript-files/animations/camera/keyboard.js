@@ -10,51 +10,61 @@ function cameraLookAt(toWhom, duration) {
   for (let i=1; i<noParticipants; i++) {
     participants[i].model.traverse(function(object) {
       if (object.isMesh) {
-        if (i !== toWhom) {
-          object.material.color = {
-            r: 1,
-            g: 1,
-            b: 1,
-            isColor: true
+        if (object.name !== "Wolf3D_Glasses") {
+          if (i !== toWhom) {
+            object.material.color = {
+              r: 0.667,
+              g: 0.667,
+              b: 0.667,
+              isColor: true
+            }
+          } else {
+            object.material.color = {
+              r: 1.33,
+              g: 1.33,
+              b: 1.33,
+              isColor: true
+            }
+            new TWEEN.Tween(object.material.color).to({
+              r: 1.33,
+              g: 1.33,
+              b: 1.33,
+              isColor: true
+            }, 1000).start()
           }
-        } else {
-          object.material.color = {
-            r: 1.5,
-            g: 1.5,
-            b: 1.5,
-            isColor: true
-          }
-          new TWEEN.Tween(object.material.color).to({
-            r: 1,
-            g: 1,
-            b: 1,
-            isColor: true
-          }, 1000).start()
         }
       }
     });
   }
   let cameraTweenRotation = new TWEEN.Tween(camera.rotation).to(posRot[noParticipants].camera.rotations[toWhom], duration)
     .easing(TWEEN.Easing.Quintic.Out)
-  let cameraTweenPosition = new TWEEN.Tween(camera.position).to({x: -0.2*participants[toWhom].rotations[0].head.y}, duration)
     .easing(TWEEN.Easing.Quintic.Out)
   cameraTweenRotation.start()
-  cameraTweenPosition.start()
 }
 
 export default function createKeyBindings() {
-  console.trace()
-  console.log('here')
-  window.addEventListener("keypress", function(event) {
-    if (event.keyCode == 65) {
-      lookControl(event.keycode)
-      alert('yo')
+  document.addEventListener("keydown", function(event) {
+    if ( ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes( event.key ) ) {
+      event.preventDefault();
+      lookControl(event.key)
     }
   });
 }
 
 function lookControl(k) {
-  console.log('k:', k)
+  console.log('key:', k)
+  let turnToLookAt
+  if ( k === 'ArrowLeft' ) {
+    participants[0].states.currentlyLookingAt -= 1;
+  } else if ( k === 'ArrowRight' ) {
+    participants[0].states.currentlyLookingAt += 1;
+  }
+  if ( participants[0].states.currentlyLookingAt < 1 ) {
+    participants[0].states.currentlyLookingAt = noParticipants-1;
+  } else if ( participants[0].states.currentlyLookingAt >= noParticipants ) {
+    participants[0].states.currentlyLookingAt = 1;
+  }
+  cameraLookAt( participants[0].states.currentlyLookingAt, 500 )
 }
 
 export { cameraLookAt }

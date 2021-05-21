@@ -17,12 +17,11 @@ function allExpression(e) {
 window.expression = expression
 export default function expression(who, e) {
 
-	let faceMorphsFrom = Object.assign({}, participants[who].blankFaceMorphTargets);
-	let faceMorphsHalf = Object.assign({}, participants[who].blankFaceMorphTargets);
-	let faceMorphsTo = Object.assign({}, participants[who].blankFaceMorphTargets);
+	let lenMorphs = participants[who].movableBodyParts.face.morphTargetInfluences.length
+	let faceMorphsTo = new Array(lenMorphs).fill(0);
+	let faceMorphsHalf = new Array(lenMorphs).fill(0);
 	faceMorphsTo[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1
-	faceMorphsHalf[participants[who].movableBodyParts.face.morphTargetDictionary[e]] = 1/2
-	console.log('faceMorphsTo:', faceMorphsTo)
+	faceMorphsHalf[participants[who].movableBodyParts.face.morphTargetDictionary[e + "Half"]] = 1
 
 	let expressionIn = new TWEEN.Tween(participants[who].movableBodyParts.face.morphTargetInfluences).to(faceMorphsTo, 500)
 		.easing(easingDict["cubicOut"])
@@ -34,17 +33,31 @@ export default function expression(who, e) {
 	expressionIn.chain(expressionOut)
 	expressionIn.start()
 
-	if ( jawNeeded[e] ) {
-		expressionIn.onStart( function() {
+	expressionIn.onStart( function() {
+		participants[who].states.changingExpression = true
+		participants[who].states.expression = 'changing'
+		if ( jawNeeded[e] ) {
 			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": expressionMorphs[e].jawOpen}, 500)
 			.easing(easingDict["cubicOut"])
 			.start()
-		})
-		expressionOut.onStart( function() {
+		}
+	})
+	expressionOut.onStart( function() {
+		participants[who].states.changingExpression = true
+		participants[who].states.expression = 'changing'
+		if ( jawNeeded[e] ) {
 			new TWEEN.Tween(participants[who].movableBodyParts.teeth.morphTargetInfluences).to({"45": expressionMorphs[e].jawOpen/3}, 1500)
 			.easing(easingDict["cubicOut"])
 			.start()
-		})
-	}
+		}
+	})
+	expressionIn.onComplete( function() {
+		participants[who].states.changingExpression = false
+		participants[who].states.expression = e
+	})
+	expressionOut.onComplete( function() {
+		participants[who].states.changingExpression = false
+		participants[who].states.expression = e + 'Half'
+	})
 }
 

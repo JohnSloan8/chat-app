@@ -14,16 +14,20 @@ import expression from "./animations/morph/expression.js"
 import gesture from "./animations/move/gesture.js"
 import cameraEnter from "./animations/camera/enter.js"
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
-import createKeyBindings from "./animations/camera/keyboard.js"
 
 init();
 
 function init() {
 	loadScene()
 	loadModels();
-	createKeyBindings()
 }
 
+
+//window.addEventListener("keypress", function(event) {
+	//if (event.key === "a") {
+		//console.log('yes')
+	//};
+//})
 
 function animate() {
 		const mixerUpdateDelta = clock.getDelta();
