@@ -8,6 +8,7 @@ import { renderer, scene } from "../scene/components/scene.js"
 import { camera } from "../scene/components/camera.js"
 import beginRandomBlinking from "./random/blink.js"
 import beginRandomSwaying from "./random/sway.js"
+import { initialiseVisemeMorphIndexes, randomBlinking, randomSwaying } from "./settings.js"
 
 let controls 
 export default function initAnimations() {
@@ -19,7 +20,6 @@ export default function initAnimations() {
 	} else {
 		participants[0].model.visible = false
 		camera.position.set(0, posRot[noParticipants].camera.y, posRot[noParticipants].camera.z);
-		console.log('camera.position:', camera.position)
 		camera.lookAt(cameraSettings.neutralFocus)
 	}
 	if ( orbitControls ) {
@@ -28,8 +28,12 @@ export default function initAnimations() {
 		controls.update();
 		window.controls = controls
 	}
-	beginRandomBlinking();
-	beginRandomSwaying();
+	if ( randomBlinking ) {
+		beginRandomBlinking();
+	}
+	if ( randomSwaying ) {
+		beginRandomSwaying();
+	}
 }
 
 export { controls }

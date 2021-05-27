@@ -1,6 +1,6 @@
 const noParticipants = 6
 const showTable = false
-const showAxesHelper = true
+const showAxesHelper = false
 const showColumn = false
 const showSkeleton = false
 const showEntranceAnimation = false

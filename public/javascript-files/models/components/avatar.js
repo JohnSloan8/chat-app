@@ -9,6 +9,7 @@ import { animate } from "../../main.js";
 import { posRot } from "../../scene/components/pos-rot.js"
 import initAnimations from '../../animations/init.js'
 import prepareExpressions from '../../animations/morph/prepare.js'
+import { initialiseVisemeMorphIndexes } from "../../animations/settings.js"
 
 let numAnimations, clip, name, animations, action, gltfLoader, skeleton;
 var participants = {};
@@ -40,7 +41,11 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		participants[i] = {}
 		participants[i].states = {
 			currentlyLookingAt: 0,
-			expression: 'neutral'
+			expression: 'half_neutral',
+			speaking: false,
+			speakingViseme: null,
+			blinking: false,
+			changingExpression: false
 		}
 		participants[i].model = gltf.scene;
 		participants[i].model.rotation.set(0, posRot[noParticipants][i].neutralYrotation, 0);
@@ -116,7 +121,7 @@ function setWeight( action, weight ) {
 function addMovableBodyParts(i) {
 	participants[i].movableBodyParts = {}
 	participants[i].model.traverse(function(object) {
-		console.log('name:', object.name)
+		//console.log('name:', object.name)
 		if (object.name === "Head") {
 			participants[i].movableBodyParts.head = object;
 		} else if (object.name === "Neck") {
@@ -197,6 +202,7 @@ function calculateLookAngles() {
 		}
 	}
 
+	initialiseVisemeMorphIndexes();
 	prepareExpressions()
 	animate()
 	initAnimations();

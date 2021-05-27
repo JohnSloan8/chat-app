@@ -7,19 +7,21 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.mod
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 
 window.blink = blink
-export default function blink(who) {
+export default function blink(who, delay=0) {
 
+	console.log('blinking')
 	if ( !participants[who].states.changingExpression && !participants[who].states.blinking ) {
 
 		let lenMorphs = participants[who].movableBodyParts.face.morphTargetInfluences.length
 		let blinkTo = new Array(lenMorphs).fill(0);
-		let partKey = participants[who].movableBodyParts.face.morphTargetDictionary[participants[who].states.expression + "Blink"]
+		let partKey = participants[who].movableBodyParts.face.morphTargetDictionary[participants[who].states.expression + "_blink"]
 		blinkTo[partKey] = 1
 		let blinking = new TWEEN.Tween(participants[who].movableBodyParts.face.morphTargetInfluences).to(blinkTo, 100)
 			.easing(easingDict["cubicOut"])
 			.yoyo(true)
 			.repeat(1)
 			.start()
+			.delay(delay)
 	blinking.onStart( function() {
 		participants[who].states.blinking = true	
 	})
