@@ -41,6 +41,7 @@ function loadIndividualGLTF(avatarName, i, cb=null) {
 		participants[i] = {}
 		participants[i].states = {
 			currentlyLookingAt: 0,
+			previouslyLookingAt: 1,
 			expression: 'half_neutral',
 			speaking: false,
 			speakingViseme: null,
@@ -163,14 +164,14 @@ function calculateLookAngles() {
 				if (j===0) {
 					let direction = new THREE.Vector3();
 					let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
-					posRot[noParticipants].camera.y = headPos.y + 0.2
+					posRot[noParticipants].camera.y = headPos.y + 0.1
 				}
 			} else {
 				participants[j].rotations[k] = {}
 				if (k===-1) {
-					xMult = 2
+					xMult = 2.5
 					yMult = 1;
-					zMult = 2;
+					zMult = 2.5;
 					participants[j].movableBodyParts.head.lookAt(0, 1, 0)
 				} else if (k===0) {
 					xMult = 1
@@ -193,14 +194,6 @@ function calculateLookAngles() {
 		}
 	}
 
-	for (let k=1; k<noParticipants; k++) {
-		let direction = new THREE.Vector3();
-		let headPos = participants[k].movableBodyParts.head.getWorldPosition(direction)
-		camera.lookAt(headPos)
-		posRot[noParticipants].camera.rotations[k] = {
-			y: camera.rotation.y * 0.15
-		}
-	}
 
 	initialiseVisemeMorphIndexes();
 	prepareExpressions()

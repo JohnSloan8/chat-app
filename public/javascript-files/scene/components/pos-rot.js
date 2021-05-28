@@ -7,6 +7,7 @@ export default function calculatePosRot(noP) {
 	posRot[noP] = {
 		camera: {
 			x: 0,
+			y: 0, //set later with ref to avatar head
 			z: cameraSettings[noP].cameraZPos+cameraSettings[noP].radius,
 			fov: cameraSettings[noP].cameraFov,
 			rotations: {},
@@ -14,8 +15,8 @@ export default function calculatePosRot(noP) {
 		cameraStart: {
 			position: {
 				x: 0,
-				y: 2.5,
-				z: cameraSettings[noP].radius*3
+				y: 2,
+				z: cameraSettings[noP].radius*2
 			},
 		},
 		0: {

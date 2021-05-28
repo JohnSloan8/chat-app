@@ -3,7 +3,7 @@ const showTable = false
 const showAxesHelper = false
 const showColumn = false
 const showSkeleton = false
-const showEntranceAnimation = false
+const showEntranceAnimation = true
 const orbitControls = true
 	
 const background = {

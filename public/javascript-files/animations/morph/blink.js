@@ -9,7 +9,6 @@ import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tw
 window.blink = blink
 export default function blink(who, delay=0) {
 
-	console.log('blinking')
 	if ( !participants[who].states.changingExpression && !participants[who].states.blinking ) {
 
 		let lenMorphs = participants[who].movableBodyParts.face.morphTargetInfluences.length

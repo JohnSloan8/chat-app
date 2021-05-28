@@ -1,12 +1,12 @@
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 import { noParticipants } from "../../scene/settings.js"
 import { participants } from "../../models/components/avatar.js"
-import avatarLookAt from "../look.js"
 import { posRot } from "../../scene/components/pos-rot.js"
+import { table } from "../../scene/components/table.js"
+import avatarLookAt from "../look.js"
 
 window.cameraLookAt = cameraLookAt
 function cameraLookAt(toWhom, duration) {
-	avatarLookAt(0, toWhom, duration)
   for (let i=1; i<noParticipants; i++) {
     participants[i].model.traverse(function(object) {
       if (object.isMesh) {
@@ -25,16 +25,15 @@ function cameraLookAt(toWhom, duration) {
               b: 1.33,
               isColor: true
             }
-            new TWEEN.Tween(object.material.color).to({
-              r: 1.33,
-              g: 1.33,
-              b: 1.33,
-              isColor: true
-            }, 1000).start()
           }
         }
       }
     });
+    if (toWhom === -1) {
+      table.material.color.set( '#772200' )
+    } else {
+      table.material.color.set( '#551100' )
+    }
   }
   let cameraTweenRotation = new TWEEN.Tween(camera.rotation).to(posRot[noParticipants].camera.rotations[toWhom], duration)
     .easing(TWEEN.Easing.Quintic.Out)
@@ -52,19 +51,33 @@ export default function createKeyBindings() {
 }
 
 function lookControl(k) {
-  console.log('key:', k)
-  let turnToLookAt
-  if ( k === 'ArrowLeft' ) {
-    participants[0].states.currentlyLookingAt -= 1;
-  } else if ( k === 'ArrowRight' ) {
-    participants[0].states.currentlyLookingAt += 1;
+  if (participants[0].states.currentlyLookingAt === -1) { // table
+    if ( k === 'ArrowUp' ) {
+      participants[0].states.currentlyLookingAt = participants[0].states.previouslyLookingAt;
+    } else if ( k === 'ArrowLeft' ) {
+      participants[0].states.currentlyLookingAt = participants[0].states.previouslyLookingAt - 1;
+    } else if ( k === 'ArrowRight' ) {
+      participants[0].states.currentlyLookingAt = participants[0].states.previouslyLookingAt + 1;
+    }
+    if ( k !== 'ArrowDown' ) {
+      participants[0].states.previouslyLookingAt = -1
+    }
+  } else {
+    participants[0].states.previouslyLookingAt = participants[0].states.currentlyLookingAt;
+    if ( k === 'ArrowLeft' ) {
+      participants[0].states.currentlyLookingAt -= 1;
+    } else if ( k === 'ArrowRight' ) {
+      participants[0].states.currentlyLookingAt += 1;
+    } else if ( k === 'ArrowDown' ) {
+      participants[0].states.currentlyLookingAt = -1;
+    }
   }
-  if ( participants[0].states.currentlyLookingAt < 1 ) {
+  if ( participants[0].states.currentlyLookingAt === 0 ) {
     participants[0].states.currentlyLookingAt = noParticipants-1;
   } else if ( participants[0].states.currentlyLookingAt >= noParticipants ) {
     participants[0].states.currentlyLookingAt = 1;
   }
-  cameraLookAt( participants[0].states.currentlyLookingAt, 500 )
+  avatarLookAt( 0, participants[0].states.currentlyLookingAt, 500 )
 }
 
 export { cameraLookAt }

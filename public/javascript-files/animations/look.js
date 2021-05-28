@@ -5,9 +5,15 @@ import { noParticipants } from "../scene/settings.js"
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.125/build/three.module.js";
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js'
 import blink from "./morph/blink.js"
+import { table } from "../scene/components/table.js"
+import { cameraLookAt } from "./camera/keyboard.js"
 
 window.avatarLookAt = avatarLookAt
 export default function avatarLookAt(who, toWhom, duration) {
+
+	if ( who === 0 ) {
+		cameraLookAt(toWhom, duration)
+	}
 
 	let head = new TWEEN.Tween(participants[who].movableBodyParts.head.rotation).to(participants[who].rotations[toWhom].head, 0.8*duration)
 	let spine2 = new TWEEN.Tween(participants[who].movableBodyParts.spine2.rotation).to(participants[who].rotations[toWhom].spine2, 0.9*duration)
@@ -24,7 +30,9 @@ export default function avatarLookAt(who, toWhom, duration) {
 	let direction = new THREE.Vector3();
 	let focalPoint;
 	if (toWhom !== who) {
-		if (toWhom === 0) {
+		if (toWhom === -1) {
+			focalPoint = table.getWorldPosition(direction)
+		} else if (toWhom === 0) {
 			focalPoint = camera.getWorldPosition(direction)
 		} else {
 			focalPoint = participants[toWhom].movableBodyParts.head.getWorldPosition(direction)
